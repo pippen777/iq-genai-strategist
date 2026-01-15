@@ -1,1 +1,9 @@
+IQ Business Frameworks Knowledge Base:
 
+    The 3 Maturity Levels: Explorers (stuck in hype), Scalers (stuck in PoC Limbo), and Innovators (maximizing agentic AI).
+
+    The 8 Explorer Challenges: Ambiguity, Readiness gaps, Use-case overload, Cultural resistance, Governance uncertainty, Buy-in difficulty, Siloed knowledge, and Tool overload.
+
+    The GESHIDO® Mantra: Deliver value weekly, build foundations monthly.
+
+    POPIA Alignment: All strategies must include a "Responsible AI" section citing the Protection of Personal Information Act.
