@@ -2,7 +2,7 @@ import streamlit as st
 from google import genai
 import os
 
-# 1. PAGE CONFIG & MODERN BRANDING
+# 1. PAGE CONFIG & DIGITAL INTEGRATOR BRANDING
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
 
 def apply_iq_branding():
@@ -17,7 +17,7 @@ def apply_iq_branding():
         color: white !important;
     }
 
-    /* Gradient Title */
+    /* IQ Digital Integrator Gradient Title */
     .title-text {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2);
         -webkit-background-clip: text;
@@ -25,10 +25,9 @@ def apply_iq_branding():
         font-size: 3.5rem !important;
         font-weight: 800 !important;
         font-family: 'Arial Black', sans-serif !important;
-        margin-bottom: 0px;
     }
 
-    /* Step Subheaders */
+    /* STEP HEADER */
     .step-header {
         color: rgba(255, 255, 255, 0.6);
         text-transform: uppercase;
@@ -37,35 +36,41 @@ def apply_iq_branding():
         margin-top: 30px;
     }
 
-    /* Modern Glassmorphism Inputs */
+    /* THE IQ INTERACTIVE BUTTON */
+    div.stButton > button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 12px !important;
+        height: 80px !important;
+        width: 100% !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+    }
+
+    /* THE "WOW" HOVER STATE (Mimics iqbusiness.net/automation) */
+    div.stButton > button:hover {
+        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
+        border: none !important;
+        transform: translateY(-5px) scale(1.02) !important;
+        box-shadow: 0 15px 30px rgba(142, 45, 226, 0.4) !important;
+        color: white !important;
+    }
+
+    /* PRIMARY ACTION BUTTON (The Orchestrate Button) */
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
+        height: 60px !important;
+        border-radius: 30px !important;
+    }
+
+    /* Glassmorphism Inputs */
     .stTextArea textarea, .stTextInput input {
         background-color: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 12px !important;
-    }
-
-    /* GESHIDO Action Button */
-    .stButton>button {
-        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
-        color: white !important;
-        border: none !important;
-        padding: 0.8rem 2.5rem !important;
-        border-radius: 30px !important;
-        font-weight: bold !important;
-        width: 100%;
-        transition: 0.3s;
-    }
-    .stButton>button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 20px rgba(142, 45, 226, 0.4);
-    }
-
-    /* Card styling for Maturity selection */
-    div.stButton > button[kind="secondary"] {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        height: 100px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -118,11 +123,11 @@ if check_password():
         st.markdown(f"**Diagnostic Result:** `{st.session_state.maturity.upper()}`")
         st.markdown('<p class="step-header">Step 2: Design Context</p>', unsafe_allow_html=True)
         
-        industry = st.text_input("Industry Segment", placeholder="e.g. Retail, Financial Services")
+        industry = st.text_input("Industry Segment", placeholder="e.g. Financial Services")
         frictions = st.text_area("Identify the top 3 friction points or value pools:", height=150)
 
         # 6. GENERATION LOGIC (Gemini 2.0 Flash)
-        if st.button("⚡ ORCHESTRATE ROADMAP"):
+        if st.button("⚡ ORCHESTRATE ROADMAP", key="gen_btn", type="primary"):
             if not frictions or not industry:
                 st.warning("Please provide industry and friction context.")
             else:
@@ -154,13 +159,6 @@ if check_password():
                         st.markdown("---")
                         st.markdown('<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
                         st.markdown(response.text)
-                        
-                        st.download_button(
-                            label="📥 Export Strategy Brief",
-                            data=response.text,
-                            file_name=f"IQ_Strategy_{industry}.md",
-                            mime="text/markdown"
-                        )
                 except Exception as e:
                     st.error(f"Engine Error: {e}")
 
