@@ -8,47 +8,54 @@ st.set_page_config(page_title="IQ GenAI Strategy Orchestrator", page_icon="🧠"
 def apply_iq_branding():
     st.markdown("""
     <style>
-    /* Main Background and Global Text */
-    .stApp { 
-        background-color: #FFFFFF !important; 
-    }
-    
-    /* Force headings and normal text to be Midnight Blue */
-    h1, h2, h3, p, span, label { 
-        color: #001965 !important; 
-        font-family: 'Arial', sans-serif !important; 
+    /* 1. The Main Background (Dark Midnight) */
+    .stApp {
+        background: radial-gradient(circle at top right, #1a1b3a, #0b101b) !important;
+        color: white !important;
     }
 
-    /* Sidebar Styling: Midnight Blue background with White text */
+    /* 2. Sidebar: Solid Midnight Blue */
     [data-testid="stSidebar"] {
         background-color: #001965 !important;
-    }
-    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, 
-    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
-        color: #FFFFFF !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* Input Box Styling */
+    /* 3. The "Digital Integrator" Gradient Text */
+    h1, .gradient-text {
+        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800 !important;
+        font-family: 'Arial Black', sans-serif !important;
+    }
+
+    /* 4. Glassmorphism Input Boxes (Dark & Transparent) */
     .stTextArea textarea {
-        background-color: #F0F2F6 !important;
-        color: #001965 !important;
-        border: 1px solid #001965 !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 12px !important;
+        backdrop-filter: blur(10px);
     }
 
-    /* GESHIDO Green Button */
+    /* 5. The GESHIDO® Button with Gradient Hover */
     .stButton>button {
-        background-color: #3F9C35 !important;
+        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         color: white !important;
-        border-radius: 8px !important;
         border: none !important;
+        padding: 0.8rem 2.5rem !important;
+        border-radius: 30px !important;
         font-weight: bold !important;
-        padding: 0.5rem 2rem !important;
+        transition: all 0.3s ease;
     }
-    
-    /* Fix for invisible Maturity Level dropdown text */
-    div[data-baseweb="select"] > div {
-        background-color: #FFFFFF !important;
-        color: #001965 !important;
+    .stButton>button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 10px 20px rgba(240, 47, 194, 0.3);
+    }
+
+    /* 6. Fixing invisible labels */
+    label, p, span {
+        color: rgba(255, 255, 255, 0.8) !important;
     }
     </style>
     """, unsafe_allow_html=True)
