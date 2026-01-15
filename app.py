@@ -5,14 +5,55 @@ import os
 # 1. BRANDING & STYLING
 st.set_page_config(page_title="IQ GenAI Strategy Orchestrator", page_icon="🧠", layout="wide")
 
-st.markdown("""
+def apply_iq_branding():
+    st.markdown("""
     <style>
-    .stApp { background-color: #FFFFFF; }
-    .stButton>button { background-color: #3F9C35; color: white; border-radius: 8px; border: none; font-weight: bold; }
-    .stSidebar { background-color: #001965; color: white; }
-    h1, h2, h3 { color: #001965; font-family: 'Arial', sans-serif; }
+    /* Main Background and Global Text */
+    .stApp { 
+        background-color: #FFFFFF !important; 
+    }
+    
+    /* Force headings and normal text to be Midnight Blue */
+    h1, h2, h3, p, span, label { 
+        color: #001965 !important; 
+        font-family: 'Arial', sans-serif !important; 
+    }
+
+    /* Sidebar Styling: Midnight Blue background with White text */
+    [data-testid="stSidebar"] {
+        background-color: #001965 !important;
+    }
+    [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, 
+    [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
+        color: #FFFFFF !important;
+    }
+
+    /* Input Box Styling */
+    .stTextArea textarea {
+        background-color: #F0F2F6 !important;
+        color: #001965 !important;
+        border: 1px solid #001965 !important;
+    }
+
+    /* GESHIDO Green Button */
+    .stButton>button {
+        background-color: #3F9C35 !important;
+        color: white !important;
+        border-radius: 8px !important;
+        border: none !important;
+        font-weight: bold !important;
+        padding: 0.5rem 2rem !important;
+    }
+    
+    /* Fix for invisible Maturity Level dropdown text */
+    div[data-baseweb="select"] > div {
+        background-color: #FFFFFF !important;
+        color: #001965 !important;
+    }
     </style>
     """, unsafe_allow_html=True)
+
+apply_iq_branding()
 
 # 2. PASSWORD GATE
 def check_password():
