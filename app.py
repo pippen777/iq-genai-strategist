@@ -1,25 +1,20 @@
 import streamlit as st
-from openai import OpenAI
+from google import genai
 import os
-import hmac
 
-# 1. BRANDING & STYLING (IQ Business Midnight Blue & Action Green)
-st.set_page_config(page_title="IQ GenAI Strategy Orchestrator", page_icon="🚀", layout="wide")
+# 1. BRANDING & STYLING
+st.set_page_config(page_title="IQ GenAI Strategy Orchestrator", page_icon="🧠", layout="wide")
 
-def local_css(file_name):
-    st.markdown(f"""
+st.markdown("""
     <style>
-    .stApp {{ background-color: #FFFFFF; }}
-    .stButton>button {{ background-color: #3F9C35; color: white; border-radius: 8px; border: none; font-weight: bold; }}
-    .stSidebar {{ background-color: #001965; color: white; }}
-    h1, h2, h3 {{ color: #001965; font-family: 'Arial', sans-serif; }}
-    .stAlert {{ border-left: 5px solid #3F9C35; }}
+    .stApp { background-color: #FFFFFF; }
+    .stButton>button { background-color: #3F9C35; color: white; border-radius: 8px; border: none; font-weight: bold; }
+    .stSidebar { background-color: #001965; color: white; }
+    h1, h2, h3 { color: #001965; font-family: 'Arial', sans-serif; }
     </style>
     """, unsafe_allow_html=True)
 
-local_css(None)
-
-# 2. PASSWORD GATE (GESHIDO Security)
+# 2. PASSWORD GATE
 def check_password():
     if "password_correct" not in st.session_state:
         st.title("🔐 IQ Strategy Vault")
@@ -34,7 +29,7 @@ def check_password():
     return True
 
 if check_password():
-    # 3. KNOWLEDGE BASE GROUNDING
+    # 3. KNOWLEDGE BASE LOADING
     def load_knowledge():
         try:
             with open("knowledge/iq_frameworks.txt", "r") as f:
@@ -48,20 +43,15 @@ if check_password():
     with st.sidebar:
         st.image("https://iqbusiness.net/wp-content/uploads/2023/04/iqbusiness-logo-white.svg", width=200)
         st.markdown("---")
-        st.subheader("🛠️ Strategy Tuning")
-        maturity = st.selectbox("Client Maturity Level", ["Explorer (Hype/Ambiguity)", "Scaler (PoC Limbo)", "Innovator (Agentic Future)"])
-        industry = st.text_input("Industry", placeholder="e.g., Banking, Retail")
+        maturity = st.selectbox("Maturity Level", ["Explorer (Hype/Ambiguity)", "Scaler (PoC Limbo)", "Innovator (Agentic Future)"])
+        industry = st.text_input("Industry", placeholder="e.g., Banking")
         
-    st.title("🧠 GenAI Strategy Orchestrator")
-    st.markdown(f"**Target:** {industry} | **Stage:** {maturity}")
+    st.title("🧠 GenAI Strategy Orchestrator (Powered by Gemini)")
 
     # 5. THE "DESIGN & BUILD" INTERFACE
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    # Initialize Gemini Client
+    client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
 
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-
-    # System Prompt: The Senior Strategist "Brain"
     system_prompt = f"""
     You are a Senior AI Strategist at IQ Business. Your goal is to move clients from 'Aha' to scaled performance.
     
@@ -73,34 +63,22 @@ if check_password():
     2. Address the '{maturity}' maturity stage specifically.
     3. Include a 'Secure & Responsible AI' section (POPIA compliance).
     4. Structure your output as a 12-week Acceleration Roadmap.
-    5. Speak with executive presence: pragmatic, commercial, and human-centric.
     """
 
     user_input = st.text_area("Describe the top 3 friction points or 'Value Pools' you want to target:", 
-                              placeholder="e.g. 1. Legal document review speed, 2. Customer service agentic support...")
+                              placeholder="e.g. 1. Speeding up credit risk assessments...")
 
     if st.button("Orchestrate Strategy"):
         if not user_input:
-            st.warning("Please define your friction points first.")
+            st.warning("Please define your friction points.")
         else:
-            with st.spinner("Applying GESHIDO® Logic..."):
-                messages = [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": f"Industry: {industry}\nMaturity: {maturity}\nFriction Points: {user_input}"}
-                ]
-                
-                response = client.chat.completions.create(
-                    model="gpt-4o",
-                    messages=messages,
-                    temperature=0.7
+            with st.spinner("Gemini is applying GESHIDO® logic..."):
+                response = client.models.generate_content(
+                    model="gemini-2.0-flash",
+                    contents=f"{system_prompt}\n\nClient Input: {user_input}"
                 )
                 
-                strategy = response.choices[0].message.content
                 st.markdown("---")
                 st.subheader("📈 Your GenAI Acceleration Roadmap")
-                st.markdown(strategy)
-                
-                st.download_button("Download Strategy Brief", strategy, file_name="IQ_GenAI_Strategy.md")
-
-    st.markdown("---")
-    st.caption("Powered by the IQ Business GenAI Keys to Winning Operating System™")
+                st.markdown(response.text)
+                st.download_button("Download Strategy", response.text, file_name="IQ_Strategy.md")
