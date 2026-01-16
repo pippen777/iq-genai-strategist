@@ -1,21 +1,20 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. PAGE CONFIG & HIGH-END BRANDING
+# 1. PAGE CONFIG & HIGH-END ARCHITECTURE
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
 
 def apply_iq_branding():
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
     
     [data-testid="stSidebar"] { display: none !important; }
     .stApp { 
-        background-color: #05070a !important; 
-        background-image: radial-gradient(circle at 80% 20%, rgba(142, 45, 226, 0.15), transparent), 
-                          radial-gradient(circle at 20% 80%, rgba(0, 173, 239, 0.15), transparent) !important;
-        color: #ffffff !important; 
-        font-family: 'Inter', sans-serif !important; 
+        background: #020408 !important; 
+        background-image: radial-gradient(at 0% 0%, rgba(0, 173, 239, 0.1) 0, transparent 50%), 
+                          radial-gradient(at 100% 100%, rgba(240, 47, 194, 0.1) 0, transparent 50%) !important;
+        font-family: 'Outfit', sans-serif !important; 
     }
     
     .title-text { 
@@ -23,77 +22,70 @@ def apply_iq_branding():
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
         font-size: 3.5rem !important; 
-        font-weight: 800 !important; 
+        font-weight: 900 !important; 
         letter-spacing: -2px;
         margin-bottom: 0px;
     }
 
-    /* GLASSMORPHISM CARDS */
-    .vision-header { 
-        background: rgba(255, 255, 255, 0.03); 
-        backdrop-filter: blur(10px);
-        padding: 50px; 
-        border-radius: 1px; 
-        border: 1px solid rgba(255, 255, 255, 0.1);
+    /* PREMIUM GLASS DASHBOARD */
+    .vision-container { 
+        background: rgba(255, 255, 255, 0.02); 
+        backdrop-filter: blur(20px);
+        padding: 60px; 
+        border: 1px solid rgba(255, 255, 255, 0.05);
         text-align: center; 
         margin: 40px 0;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
     
-    .exec-card { 
-        background: rgba(255, 255, 255, 0.02); 
-        padding: 30px; 
-        border-radius: 1px; 
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        min-height: 450px;
-        transition: transform 0.3s ease;
+    .phase-card { 
+        background: rgba(255, 255, 255, 0.01); 
+        padding: 40px; 
+        border-left: 1px solid rgba(0, 173, 239, 0.3);
+        min-height: 480px;
+        transition: all 0.4s ease;
     }
-    .exec-card:hover { border: 1px solid rgba(0, 173, 239, 0.4); }
+    .phase-card:hover { background: rgba(255, 255, 255, 0.03); border-left: 1px solid #F02FC2; }
 
-    .card-label { 
+    .label-accent { 
         color: #00ADEF; 
         text-transform: uppercase; 
         font-size: 0.7rem; 
         font-weight: 700; 
-        letter-spacing: 3px; 
-        margin-bottom: 20px; 
+        letter-spacing: 4px; 
     }
 
-    /* MODERN SELECTOR BUTTONS */
+    /* KINETIC BUTTONS: Fixes the hover & selection logic */
     div.stButton > button {
         background: transparent !important;
-        color: rgba(255, 255, 255, 0.6) !important;
+        color: rgba(255, 255, 255, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 0px !important;
-        height: 50px !important;
-        width: 100% !important;
+        height: 55px !important;
         font-weight: 400 !important;
         text-transform: uppercase;
         letter-spacing: 2px;
-        font-size: 0.75rem !important;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
     
     div.stButton > button:hover {
-        color: white !important;
-        border-color: white !important;
-        background: rgba(255, 255, 255, 0.05) !important;
+        color: #ffffff !important;
+        border-color: #00ADEF !important;
+        box-shadow: inset 0 0 10px rgba(0, 173, 239, 0.2) !important;
     }
 
-    /* THE SELECTED STATE GLOW */
     .selected-glow div.stButton > button {
-        background: white !important;
-        color: black !important;
+        background: #ffffff !important;
+        color: #020408 !important;
         border: none !important;
         font-weight: 700 !important;
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.4) !important;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2) !important;
     }
 
     .stTextArea textarea { 
-        background: rgba(255,255,255,0.02) !important; 
-        color: white !important; 
+        background: transparent !important; 
+        color: #ffffff !important; 
         border: 1px solid rgba(255,255,255,0.1) !important;
-        border-radius: 0px !important;
+        font-size: 1.1rem !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -103,8 +95,8 @@ apply_iq_branding()
 # 2. PASSWORD GATE
 if "password_correct" not in st.session_state:
     st.markdown('<h1 class="title-text">STRATEGY VAULT</h1>', unsafe_allow_html=True)
-    pwd = st.text_input("Enter Access Key", type="password")
-    if st.button("AUTHENTICATE"):
+    pwd = st.text_input("Consultant Access Key", type="password")
+    if st.button("VERIFY IDENTITY"):
         if pwd == st.secrets.get("APP_PASSWORD", "iq-vision-2026"):
             st.session_state["password_correct"] = True
             st.rerun()
@@ -112,58 +104,50 @@ if "password_correct" not in st.session_state:
 
 st.markdown('<p class="title-text">ORCHESTRATOR</p>', unsafe_allow_html=True)
 
-# 3. INPUT SECTIONS
-st.markdown('<br><p class="card-label">01 / AI MATURITY</p>', unsafe_allow_html=True)
+# 3. STRATEGIC INPUTS
+st.markdown('<br><p class="label-accent">01 / DIAGNOSE MATURITY</p>', unsafe_allow_html=True)
 m_cols = st.columns(3)
-opts = {"Explorer": "Explorer", "Scaler": "Scaler", "Innovator": "Innovator"}
-for i, (k, v) in enumerate(opts.items()):
+for i, (k, v) in enumerate({"Explorer": "Explorer", "Scaler": "Scaler", "Innovator": "Innovator"}.items()):
     with m_cols[i]:
         if st.session_state.get("maturity") == k: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
-        if st.button(v, key=f"mat_{k}"):
-            st.session_state.maturity = k
-            st.rerun()
+        if st.button(v, key=f"mat_{k}"): st.session_state.maturity = k; st.rerun()
         if st.session_state.get("maturity") == k: st.markdown('</div>', unsafe_allow_html=True)
 
 if "maturity" in st.session_state:
-    st.markdown('<br><p class="card-label">02 / INDUSTRY SEGMENT</p>', unsafe_allow_html=True)
+    st.markdown('<br><p class="label-accent">02 / INDUSTRY VERTICAL</p>', unsafe_allow_html=True)
     i_cols = st.columns(5)
-    inds = {"Fin": "Financial", "Ret": "Retail", "Tel": "Telecoms", "Pub": "Public", "Min": "Mining"}
-    for i, (k, v) in enumerate(inds.items()):
+    for i, (k, v) in enumerate({"Fin": "Financial", "Ret": "Retail", "Tel": "Telecoms", "Pub": "Public", "Min": "Mining"}.items()):
         with i_cols[i]:
             if st.session_state.get("ind") == v: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
-            if st.button(v, key=f"ind_{k}"):
-                st.session_state.ind = v
-                st.rerun()
+            if st.button(v, key=f"ind_{k}"): st.session_state.ind = v; st.rerun()
             if st.session_state.get("ind") == v: st.markdown('</div>', unsafe_allow_html=True)
 
-# 4. FAIL-SAFE ENGINE
+# 4. GROUNDED ORCHESTRATION ENGINE
 if "ind" in st.session_state:
-    frictions = st.text_area("STRATEGIC FRICTION POINTS:", placeholder="Define the business blocker...")
+    frictions = st.text_area("EXECUTIVE FRICTION POINTS:", placeholder="Define the business blocker...")
     
-    if st.button("ORCHESTRATE STRATEGY", type="primary"):
+    if st.button("ORCHESTRATE ROADMAP", type="primary"):
         try:
             genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+            # Auto-discovery to prevent 404
+            models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
+            model = genai.GenerativeModel('models/gemini-1.5-flash' if 'models/gemini-1.5-flash' in models else models[0])
             
-            # Dynamic Model Discovery to avoid 404
-            available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-            target_model = 'models/gemini-1.5-flash' if 'models/gemini-1.5-flash' in available_models else available_models[0]
-            
-            model = genai.GenerativeModel(target_model)
-            
+            # STRICT GROUNDING PROMPT
             prompt = f"""
-            System: IQ Business Senior Partner.
-            Context: Industry {st.session_state.ind}, Maturity {st.session_state.maturity}.
-            Problem: {frictions}
+            Role: IQ Business Lead Strategist. 
+            Methodology: GESHIDO® (Foundations Monthly, Value Weekly).
+            Constraint: Ground all tasks in South African compliance (POPIA).
             
-            Task: Provide a 90-day strategy.
-            Format:
-            [VISION] One sentence bold vision.
-            [METRIC] Before vs After impact.
-            [MONTH1], [MONTH2], [MONTH3] 4 bullets each.
-            No markdown stars (**). Use <b> tags for emphasis.
+            Inputs: Industry {st.session_state.ind}, Maturity {st.session_state.maturity}, Friction {frictions}.
+            
+            Output Structure (Strictly No Markdown Stars):
+            [VISION] 1-sentence high-impact vision.
+            [IMPACT] Realistic Before vs After metrics.
+            [M1], [M2], [M3] 4 bullets each. Month 1 MUST focus on Foundation. Month 3 MUST focus on Agentic Scaling.
             """
             
-            with st.spinner("SYNTHESIZING..."):
+            with st.spinner("SYNTHESIZING STRATEGY..."):
                 res = model.generate_content(prompt).text
                 
                 def extract(text, tag, end_tag=None):
@@ -171,14 +155,14 @@ if "ind" in st.session_state:
                     end = text.find(end_tag) if end_tag else len(text)
                     return text[start:end].replace("**", "").strip()
 
-                st.markdown(f'<div class="vision-header"><h1 style="font-weight:300; font-size: 2.2rem; line-height:1.2;">{extract(res, "[VISION]", "[METRIC]")}</h1></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="vision-container"><h1 style="font-weight:300; font-size: 2.5rem;">{extract(res, "[VISION]", "[IMPACT]")}</h1></div>', unsafe_allow_html=True)
                 
-                st.markdown(f'<div style="text-align:center; margin-bottom:60px;"><p class="card-label">PROJECTED IMPACT</p><h2 style="color:#F02FC2; font-size:2.5rem; font-weight:800;">{extract(res, "[METRIC]", "[MONTH1]")}</h2></div>', unsafe_allow_html=True)
+                st.markdown(f'<div style="text-align:center; margin-bottom:60px;"><p class="label-accent">90-DAY PROJECTED IMPACT</p><h2 style="color:#F02FC2; font-size:2.8rem; font-weight:900; letter-spacing:-1px;">{extract(res, "[IMPACT]", "[M1]")}</h2></div>', unsafe_allow_html=True)
 
                 c1, c2, c3 = st.columns(3)
-                with c1: st.markdown(f'<div class="exec-card"><p class="card-label">PHASE 01 / FOUNDATION</p><div style="font-size:0.95rem; line-height:1.6; color:rgba(255,255,255,0.8);">{extract(res, "[MONTH1]", "[MONTH2]")}</div></div>', unsafe_allow_html=True)
-                with c2: st.markdown(f'<div class="exec-card"><p class="card-label">PHASE 02 / VELOCITY</p><div style="font-size:0.95rem; line-height:1.6; color:rgba(255,255,255,0.8);">{extract(res, "[MONTH2]", "[MONTH3]")}</div></div>', unsafe_allow_html=True)
-                with c3: st.markdown(f'<div class="exec-card"><p class="card-label">PHASE 03 / AGENTIC</p><div style="font-size:0.95rem; line-height:1.6; color:rgba(255,255,255,0.8);">{extract(res, "[MONTH3]")}</div></div>', unsafe_allow_html=True)
+                with c1: st.markdown(f'<div class="phase-card"><p class="label-accent">MONTH 01 / FOUNDATION</p><div style="color:rgba(255,255,255,0.7);">{extract(res, "[M1]", "[M2]")}</div></div>', unsafe_allow_html=True)
+                with c2: st.markdown(f'<div class="phase-card"><p class="label-accent">MONTH 02 / VELOCITY</p><div style="color:rgba(255,255,255,0.7);">{extract(res, "[M2]", "[M3]")}</div></div>', unsafe_allow_html=True)
+                with c3: st.markdown(f'<div class="phase-card"><p class="label-accent">MONTH 03 / AGENTIC</p><div style="color:rgba(255,255,255,0.7);">{extract(res, "[M3]")}</div></div>', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"ENGINE STATUS: {e}")
