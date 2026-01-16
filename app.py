@@ -2,55 +2,53 @@ import streamlit as st
 from styles import apply_iq_styles
 from brain import run_orchestrator
 
-st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="IQ Strategy Orchestrator", layout="wide")
 apply_iq_styles()
 
 st.markdown('<h1 class="title-text">Orchestrator</h1>', unsafe_allow_html=True)
 
-# STEP 1: MATURITY DIAGNOSTIC
-st.markdown('<p class="step-header">Step 1: Diagnose Maturity</p>', unsafe_allow_html=True)
+# STEP 1: MATURITY (Icons Removed)
+st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem;">Step 1: Diagnose Maturity</p>', unsafe_allow_html=True)
 m_cols = st.columns(3)
-m_opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
-for i, (k, v) in enumerate(m_opts.items()):
+m_opts = {"Explorer": "EXPLORER", "Scaler": "SCALER", "Innovator": "INNOVATOR"}
+
+for i, (key, label) in enumerate(m_opts.items()):
     with m_cols[i]:
-        if st.session_state.get("maturity") == k: st.markdown('<div class="selected-btn">', unsafe_allow_html=True)
-        if st.button(v, key=f"m_{k}"): 
-            st.session_state.maturity = k
+        # Logic to lock the beautiful hover style
+        if st.session_state.get("maturity") == key:
+            st.markdown('<div class="locked-selection">', unsafe_allow_html=True)
+        
+        if st.button(label, key=f"btn_{key}"):
+            st.session_state.maturity = key
             st.rerun()
-        if st.session_state.get("maturity") == k: st.markdown('</div>', unsafe_allow_html=True)
+            
+        if st.session_state.get("maturity") == key:
+            st.markdown('</div>', unsafe_allow_html=True)
 
-# STEP 2: INDUSTRY SEGMENT BUTTONS
+# STEP 2: INDUSTRY (Icons Removed)
 if "maturity" in st.session_state:
-    st.markdown('<p class="step-header">Step 2: Select Industry Segment</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem; margin-top:30px;">Step 2: Industry Segment</p>', unsafe_allow_html=True)
     i_cols = st.columns(5)
-    i_opts = {
-        "Fin": "🏦 FINANCIAL", 
-        "Ret": "🛒 RETAIL", 
-        "Tel": "📡 TELECOMS", 
-        "Pub": "🏛️ PUBLIC", 
-        "Min": "⛏️ MINING"
-    }
-    for i, (k, v) in enumerate(i_opts.items()):
+    i_opts = {"Fin": "FINANCIAL", "Ret": "RETAIL", "Tel": "TELECOMS", "Pub": "PUBLIC", "Min": "MINING"}
+    
+    for i, (key, label) in enumerate(i_opts.items()):
         with i_cols[i]:
-            # This wrapper applies the 'Selected' Neon Glow from your styles.py
-            if st.session_state.get("ind") == v: st.markdown('<div class="selected-btn">', unsafe_allow_html=True)
-            if st.button(v, key=f"ind_{k}"): 
-                st.session_state.ind = v
+            if st.session_state.get("ind") == label:
+                st.markdown('<div class="locked-selection">', unsafe_allow_html=True)
+            
+            if st.button(label, key=f"ind_{key}"):
+                st.session_state.ind = label
                 st.rerun()
-            if st.session_state.get("ind") == v: st.markdown('</div>', unsafe_allow_html=True)
+                
+            if st.session_state.get("ind") == label:
+                st.markdown('</div>', unsafe_allow_html=True)
 
-# STEP 3: STRATEGIC CONTEXT & GENERATION
+# STEP 3: FRICTION & GENERATION
 if "ind" in st.session_state:
-    st.markdown('<p class="step-header">Step 3: Define Friction</p>', unsafe_allow_html=True)
-    frictions = st.text_area("Identify the top friction points or value pools:", height=150, placeholder="e.g., 5-day KYC latency costing 20% lead loss...")
+    st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem; margin-top:30px;">Step 3: Define Friction</p>', unsafe_allow_html=True)
+    frictions = st.text_area("Identify strategic friction points:", height=150)
 
     if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
-        if not frictions:
-            st.warning("Please provide strategic friction context.")
-        else:
-            # Passes industry and maturity to the grounded brain.py
-            res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
-            st.markdown("---")
-            st.markdown('<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
-            st.write(res)
-            st.caption("© 2026 iqbusiness | GenAI Keys to Winning Operating System™")
+        res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
+        st.markdown("---")
+        st.markdown(res)
