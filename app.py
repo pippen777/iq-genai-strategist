@@ -61,11 +61,6 @@ if check_password():
             with st.spinner("Analyzing tensions and modeling ROI..."):
                 st.session_state.res = run_orchestrator(st.session_state.ind, st.session_state.mat, frictions)
                 st.rerun()
-
-    # RESULT DISPLAY
-    if st.session_state.get("res"):
-        st.markdown("---")
-        st.markdown(st.session_state.res, unsafe_allow_html=True)
    
 # --- Bottom of app.py ---
 
