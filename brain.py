@@ -10,27 +10,27 @@ def run_orchestrator(ind, maturity, frictions):
         model = genai.GenerativeModel(target_model)
         
         prompt = f"""
-        Role: Lead AI Partner at IQ Business. 
+        System: Senior AI Strategist at IQ Business. 
         Framework: GESHIDO® (Value Weekly, Foundations Monthly).
-        Context: {ind} | {maturity}. Friction: {frictions}
+        Context: Industry: {ind} | Maturity: {maturity} | Friction: {frictions}
 
-        TASK: Generate an Executive Strategy Dashboard.
+        TASK: Generate a 12-week roadmap using HTML Cards.
         
-        1. THE 'AHA' MOMENT: One visionary, aggressive sentence. 
-           Wrap in: <div class='aha-box'><p class='aha-text'>YOUR_SENTENCE</p></div>
-        
-        2. 12-WEEK ROADMAP: 3 Phase Cards for Month 1 (Value), Month 2 (Scale), Month 3 (Govern).
-           - Month 3 MUST include POPIA Compliance and Data Ethics.
-        
-        3. IMPACT TABLE: A Now vs Target table. Use <span class='target-state'> for targets.
-        
-        STRICT RULES:
-        - No stars (**). Use <h3> for titles.
-        - Ensure Month 1 has a 'Week 1' Quick Win.
+        REQUIRED HTML STRUCTURE:
+        1. THE 'AHA' MOMENT: <div class='aha-box'><p class='aha-text'>[Visionary Sentence]</p></div>
+        2. PHASE CARDS: 3 cards for Month 1 (Value), Month 2 (Scale), Month 3 (Govern).
+           Wrap each in: <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; border-top:4px solid #F02FC2; margin-bottom:15px; color:white;">
+        3. IMPACT TABLE: A clean HTML table. Use <span class="target-state"> for the Target State values.
+
+        RULES:
+        - Use ONLY <div> containers. NO <html> or <body>.
+        - NO markdown stars (**). Use <h3> for titles.
+        - Month 3 MUST include 'POPIA & Model Governance'.
         """
         
         response = model.generate_content(prompt)
+        # Clean up markdown code blocks if the AI adds them
         clean_res = re.sub(r"```[a-z]*\n?", "", response.text).replace("```", "").strip()
         return clean_res
     except Exception as e:
-        return f'<div style="color:red;">Engine Alignment Error: {str(e)}</div>'
+        return f"<div style='color:red;'>Engine Error: {str(e)}</div>"
