@@ -13,26 +13,21 @@ def apply_iq_styles():
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* THE MASSIVE 'AHA' HERO */
-    .aha-box {
-        padding: 45px;
-        background: rgba(0, 173, 239, 0.08);
-        border-left: 8px solid #00ADEF;
-        border-radius: 20px;
-        margin: 40px 0;
-        box-shadow: 0 0 50px rgba(0, 173, 239, 0.15);
+    .title-text {
+        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2);
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        font-size: 3.5rem !important; font-weight: 800 !important;
     }
 
-    .aha-text {
-        font-size: 2.4rem !important;
-        font-weight: 800 !important;
-        line-height: 1.2 !important;
-        background: linear-gradient(90deg, #00ADEF, #FFFFFF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+    .step-header {
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        margin: 25px 0 15px 0;
     }
 
-    /* KINETIC BUTTONS (Idle/Hover) */
+    /* KINETIC HOVER BUTTONS */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -49,20 +44,30 @@ def apply_iq_styles():
         border: none !important;
     }
 
-    /* THE SOLID BLUE LOCK */
-    /* We target buttons inside a div that we will mark with 'selected-container' */
-    div.selected-container .stButton > button {
+    /* THE SOLID BLUE SELECTION LOCK */
+    .stButton button:has(p:contains("✓")) {
         background-color: #00ADEF !important;
-        background-image: none !important;
         color: #05101b !important;
         border: none !important;
-        box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
+        box-shadow: 0 0 25px rgba(0, 173, 239, 0.6) !important;
         font-weight: 800 !important;
-        /* Visual checkmark */
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2305101b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
-        background-repeat: no-repeat !important;
-        background-position: right 15px center !important;
-        padding-right: 40px !important;
+    }
+
+    /* THE MASSIVE 'AHA' HERO */
+    .aha-box {
+        padding: 45px;
+        background: rgba(0, 173, 239, 0.08);
+        border-left: 8px solid #00ADEF;
+        border-radius: 20px;
+        margin: 40px 0;
+    }
+
+    .aha-text {
+        font-size: 2.4rem !important;
+        font-weight: 800 !important;
+        background: linear-gradient(90deg, #00ADEF, #FFFFFF);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .target-state {
@@ -71,12 +76,10 @@ def apply_iq_styles():
         text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
     }
     
-    /* THE ROADMAP BUTTON */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
-        height: 70px !important;
-        border-radius: 35px !important;
-        border: none !important;
+        height: 65px !important;
+        border-radius: 32px !important;
     }
     </style>
     """, unsafe_allow_html=True)
