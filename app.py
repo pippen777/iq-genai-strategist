@@ -14,10 +14,8 @@ m_opts = {"Explorer": "EXPLORER", "Scaler": "SCALER", "Innovator": "INNOVATOR"}
 
 for i, (key, label) in enumerate(m_opts.items()):
     with m_cols[i]:
-        # If selected, add the checkmark directly to the label
         is_selected = st.session_state.get("maturity") == key
         display_label = f"{label} ✓" if is_selected else label
-        
         if st.button(display_label, key=f"mat_{key}"):
             st.session_state.maturity = key
             st.rerun()
@@ -34,7 +32,6 @@ for i, (key, label) in enumerate(i_opts.items()):
     with i_cols[i]:
         is_selected = st.session_state.get("ind") == label
         display_label = f"{label} ✓" if is_selected else label
-        
         if st.button(display_label, key=f"ind_{key}"):
             st.session_state.ind = label
             st.rerun()
@@ -47,4 +44,21 @@ st.markdown('<p class="step-header">03 / DEFINE STRATEGIC FRICTION</p>', unsafe_
 frictions = st.text_area("Identify the top friction points:", height=150, placeholder="Define the business blocker...")
 
 if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
-    # ... (rest of your orchestration logic)
+    if not frictions:
+        st.warning("Please provide context to ground the GESHIDO strategy.")
+    else:
+        progress_bar = st.progress(0)
+        status = st.empty()
+        status.markdown('<p style="color:#00ADEF;">Synthesizing IQ Strategy...</p>', unsafe_allow_html=True)
+        progress_bar.progress(30)
+        
+        # Call the brain
+        res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
+        
+        progress_bar.progress(100)
+        status.empty()
+        progress_bar.empty()
+        
+        st.markdown("---")
+        st.markdown(res, unsafe_allow_html=True)
+        st.caption("© 2026 iqbusiness | GenAI Keys to Winning Operating System™")
