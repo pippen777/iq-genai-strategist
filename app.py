@@ -1,6 +1,5 @@
 import streamlit as st
-from google import genai
-from google.genai import types
+import google.generativeai as genai
 
 # 1. PAGE CONFIG & BRANDING
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
@@ -20,20 +19,24 @@ def apply_iq_branding():
         border-radius: 12px !important;
         height: 75px !important;
         width: 100% !important;
-        transition: all 0.4s ease !important;
-        font-weight: 600 !important;
+        transition: all 0.3s ease !important;
     }
 
-    /* HOVER & PERSISTENT SELECTED STATE */
-    div.stButton > button:hover, .selected-btn div.stButton > button {
+    /* HOVER STYLE */
+    div.stButton > button:hover {
+        border: 1px solid #00ADEF !important;
+        background: rgba(0, 173, 239, 0.1) !important;
+    }
+
+    /* SELECTED STATE - KEEP THE GLOW */
+    .selected-btn div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
-        transform: translateY(-5px) !important;
-        box-shadow: 0 15px 30px rgba(142, 45, 226, 0.5) !important;
+        box-shadow: 0 10px 25px rgba(142, 45, 226, 0.6) !important;
         color: white !important;
     }
 
-    .stTextArea textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: white !important; border-radius: 12px !important; }
+    .stTextArea textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: white !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -42,76 +45,66 @@ apply_iq_branding()
 # 2. PASSWORD GATE
 if "password_correct" not in st.session_state:
     st.markdown('<h1 class="title-text">Strategy Vault</h1>', unsafe_allow_html=True)
-    pwd = st.text_input("Consultant Access Code", type="password")
-    if st.button("Unlock GESHIDO® Engine"):
+    pwd = st.text_input("Access Code", type="password")
+    if st.button("Unlock"):
         if pwd == st.secrets.get("APP_PASSWORD", "iq-vision-2026"):
             st.session_state["password_correct"] = True
             st.rerun()
-        else:
-            st.error("Invalid Access Code.")
     st.stop()
 
-# 3. KNOWLEDGE LOADER
+# 3. KNOWLEDGE
 def load_knowledge():
     try:
         with open("knowledge/iq_frameworks.txt", "r") as f: return f.read()
-    except: return "IQ Business GESHIDO Philosophy: Value Weekly, Foundations Monthly."
+    except: return "IQ GESHIDO: Value Weekly, Foundations Monthly."
 
 st.markdown('<p class="title-text">Orchestrator</p>', unsafe_allow_html=True)
 
-# 4. STEP 1: MATURITY (With Permanent Highlight)
+# 4. STEP 1: MATURITY
 st.markdown('### Step 1: Diagnose Maturity')
 m_cols = st.columns(3)
-maturity_map = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
+opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
 
-for i, (m_key, m_label) in enumerate(maturity_map.items()):
+for i, (k, v) in enumerate(opts.items()):
     with m_cols[i]:
-        if st.session_state.get("maturity") == m_key:
+        if st.session_state.get("maturity") == k:
             st.markdown('<div class="selected-btn">', unsafe_allow_html=True)
-        if st.button(m_label, key=f"mat_{m_key}"):
-            st.session_state.maturity = m_key
+        if st.button(v, key=f"m_{k}"):
+            st.session_state.maturity = k
             st.rerun()
-        if st.session_state.get("maturity") == m_key:
+        if st.session_state.get("maturity") == k:
             st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. STEP 2: INDUSTRY (With Permanent Highlight)
+# 5. STEP 2: INDUSTRY
 if "maturity" in st.session_state:
     st.markdown('### Step 2: Select Industry Segment')
     i_cols = st.columns(5)
-    ind_map = {
-        "Fin": "🏦 Financial Services", "Ret": "🛒 Retail & FMCG", 
-        "Tel": "📡 Telecoms", "Pub": "🏛️ Public Sector", "Min": "⛏️ Mining & Energy"
-    }
-    for i, (i_key, i_label) in enumerate(ind_map.items()):
+    inds = {"Fin": "🏦 Financial", "Ret": "🛒 Retail", "Tel": "📡 Telecoms", "Pub": "🏛️ Public", "Min": "⛏️ Mining"}
+    for i, (k, v) in enumerate(inds.items()):
         with i_cols[i]:
-            if st.session_state.get("ind") == i_label:
+            if st.session_state.get("ind") == v:
                 st.markdown('<div class="selected-btn">', unsafe_allow_html=True)
-            if st.button(i_label, key=f"ind_{i_key}"):
-                st.session_state.ind = i_label
+            if st.button(v, key=f"i_{k}"):
+                st.session_state.ind = v
                 st.rerun()
-            if st.session_state.get("ind") == i_label:
+            if st.session_state.get("ind") == v:
                 st.markdown('</div>', unsafe_allow_html=True)
 
-# 6. STEP 3: GENERATE (FORCED V1 STABLE ENDPOINT)
+# 6. STEP 3: GENERATE
 if "ind" in st.session_state:
-    st.markdown(f"**Strategy Path:** `{st.session_state.ind}` | `{st.session_state.maturity}`")
-    frictions = st.text_area("Define top friction points:", placeholder="e.g. Manual data silos...")
+    st.markdown(f"**Path Locked:** `{st.session_state.ind}` | `{st.session_state.maturity}`")
+    frictions = st.text_area("Friction Points:", placeholder="Define the blockers...")
     
     if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
         try:
-            # FIX: Explicitly set api_version to 'v1' to avoid the v1beta 404
-            client = genai.Client(
-                api_key=st.secrets["GEMINI_API_KEY"],
-                http_options=types.HttpOptions(api_version='v1')
-            )
+            # LEGACY CONFIGURATION (Most stable)
+            genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+            model = genai.GenerativeModel('gemini-1.5-flash')
             
-            # Use stable model ID
-            response = client.models.generate_content(
-                model="gemini-1.5-flash",
-                contents=f"Context: {load_knowledge()}\n\nIndustry: {st.session_state.ind}, Maturity: {st.session_state.maturity}. Friction: {frictions}. Create a roadmap."
+            response = model.generate_content(
+                f"Context: {load_knowledge()}\nIndustry: {st.session_state.ind}\nMaturity: {st.session_state.maturity}\nFrictions: {frictions}\nTask: 12-week GESHIDO roadmap."
             )
             st.markdown("---")
             st.markdown(response.text)
-            st.download_button("Download Strategy Brief", response.text, file_name="IQ_Strategy.md")
         except Exception as e:
             st.error(f"Engine Error: {e}")
