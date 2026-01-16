@@ -2,7 +2,6 @@ import streamlit as st
 from styles import apply_iq_styles
 from brain import run_orchestrator
 
-# Config must be first
 st.set_page_config(page_title="IQ Orchestrator", layout="wide")
 apply_iq_styles()
 
@@ -50,7 +49,6 @@ if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
         status = st.empty()
         status.markdown('<p style="color:#00ADEF;">Synthesizing IQ Strategy...</p>', unsafe_allow_html=True)
         
-        # Run Orchestration
         res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
         
         progress_bar.progress(100)
