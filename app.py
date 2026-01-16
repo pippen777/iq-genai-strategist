@@ -79,6 +79,11 @@ apply_iq_branding()
 
 # 2. SECURE ACCESS GATE
 def check_password():
+    # NEW: Allow pings to keep the app awake without a password
+    if st.query_params.get("wake") == "true":
+        st.write("Engine Warmed.")
+        return False 
+
     if "password_correct" not in st.session_state:
         st.markdown('<h1 class="title-text">Strategy Vault</h1>', unsafe_allow_html=True)
         pwd = st.text_input("Consultant Access Code", type="password")
@@ -90,8 +95,6 @@ def check_password():
                 st.error("Access Denied.")
         return False
     return True
-
-if check_password():
     # 3. KNOWLEDGE BASE GROUNDING
     def load_iq_knowledge():
         try:
