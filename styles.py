@@ -25,7 +25,17 @@ def apply_iq_styles():
     div[data-testid="stButton"] button:hover p {
         color: white !important;
     }
-
+/* Update your .title-text class in styles.py */
+.title-text {
+    font-size: 56px !important;
+    font-weight: 800 !important;
+    background: linear-gradient(90deg, #00ADEF 0%, #F02FC2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0px 10px 30px rgba(0, 173, 239, 0.3);
+    letter-spacing: -1px;
+    margin-bottom: 40px !important;
+}
     /* UNIVERSAL BUTTON BASE */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
