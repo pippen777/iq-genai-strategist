@@ -28,11 +28,10 @@ def apply_iq_styles():
         font-weight: 800 !important;
         line-height: 1.2 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    /* RESTORED KINETIC HOVER */
+    /* KINETIC BUTTONS */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -40,41 +39,36 @@ def apply_iq_styles():
         border-radius: 12px !important;
         height: 65px !important;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        font-weight: 600 !important;
-        text-transform: uppercase !important;
     }
 
     .stButton > button:hover {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
-        border: none !important;
         transform: scale(1.05) translateY(-5px) !important;
         box-shadow: 0 15px 35px rgba(0, 173, 239, 0.4) !important;
+        border: none !important;
     }
 
-    /* THE "SELECTED" STATE LOCK - CRASH PROOF */
+    /* THE "SELECTED" STATE WITH VISUAL CHECKMARK */
     .stButton:has(div[data-testid="stMarkdown"] p:contains("SELECTED")) button {
         background-color: #00ADEF !important;
-        background-image: none !important;
         color: #05101b !important;
-        border: none !important;
         box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
-        transform: scale(1.02) !important;
         font-weight: 800 !important;
     }
 
-    /* Hiding the selection marker text */
-    .selection-marker { display: none !important; }
+    /* Adding the checkmark via CSS pseudo-element */
+    .stButton:has(div[data-testid="stMarkdown"] p:contains("SELECTED")) button::after {
+        content: " ✓";
+        font-size: 1.2rem;
+        font-weight: 900;
+    }
 
+    .selection-marker { display: none !important; }
+    
     .target-state {
         color: #00ADEF !important;
         font-weight: 900 !important;
         text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
-    }
-    
-    div.stButton > button[kind="primary"] {
-        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
-        height: 65px !important;
-        border-radius: 32px !important;
     }
     </style>
     """, unsafe_allow_html=True)
