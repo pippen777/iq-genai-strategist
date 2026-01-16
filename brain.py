@@ -7,35 +7,62 @@ def run_orchestrator(ind, maturity, frictions, user_feedback=None):
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         model_list = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
         selected_model = next((m for m in model_list if 'gemini-1.5-flash' in m), model_list[0])
-        model = genai.GenerativeModel(selected_model)
+        
+        # Safety overrides to ensure industrial strategy analysis isn't flagged
+        safety = [
+            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
+            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"}
+        ]
+        
+        model = genai.GenerativeModel(selected_model, safety_settings=safety)
         
         context = f"Industry: {ind} | Maturity: {maturity} | Friction: {frictions}"
         if user_feedback:
-            context += f" | PIVOT CHALLENGE: {user_feedback}"
+            context += f" | STRATEGIC PIVOT (ADAPT TO THIS): {user_feedback}"
 
+        # THE REFINED INTELLIGENCE PROMPT
         prompt = f"""
         {context}
-        Role: Senior AI Strategist at IQ Business. 
-        Framework: GESHIDO®.
+        Role: Senior AI Strategy Partner at IQ Business. 
+        Framework: GESHIDO® (Value Weekly, Foundations Monthly).
+        
+        REQUIRED STRUCTURE:
+        1. EXECUTIVE BRIEFING: 
+           Wrap in <div class='executive-brief'>
+           <h3>Executive Briefing</h3>
+           <ul>
+             <li><strong>The Core Unlock:</strong> [1 sentence on the primary AI lever]</li>
+             <li><strong>The Value:</strong> [1 sentence on the projected ROI/Impact]</li>
+             <li><strong>The Critical Risk:</strong> [1 sentence on the top Strategic Tension]</li>
+           </ul>
+           </div>
 
-        SPECIAL ROI INSTRUCTION:
-        - If Maturity is EXPLORER: Focus ROI on 'Cost of Inaction' and 'Opportunity Capture'.
-        - If Maturity is SCALER: Focus ROI on 'Operational Efficiency' and 'Scale Multipliers'.
+        2. AI REASONING ENGINE: 
+           Wrap in <div class='aha-box'>
+           <h3>Reasoning Engine</h3>
+           <p>Step 1: Pattern Recognition</p>
+           <p>Step 2: Economic Modeling (LTV vs Intervention Cost math)</p>
+           <p>Step 3: Strategy Selection Logic</p>
+           </div>
 
-        REQUIRED OUTPUT:
-        1. REASONING ENGINE: <div class='aha-box'><h3>Reasoning Engine</h3>...</div>. Explain the math.
-        2. 3 TENSIONS: Use <div class='blindspot-card'>...</div>.
-        3. ROADMAP: 3 Phase Cards using <div class='phase-card'>...</div>.
-        4. IMPACT TABLE: ROI metrics using <span class='target-state'>...</span> with Data Logic footnotes.
-           - You MUST use a standard <table> with <thead> and <tbody>.
-           - Column 1: Metric | Column 2: Current State | Column 3: Target State (AI Impact) | Column 4: Data Logic.
-           - Wrap the 'Target State' values in <span class='target-state'>...</span>.
-           - Ensure every <tr> and <td> tag is explicitly closed.
+        3. STRATEGIC TENSIONS: 
+           Identify 3 core trade-offs. Wrap each in <div class='blindspot-card'>.
+           Example: 'Proactive Value vs. Discount Dilution'.
 
-        STRICT: No stars (**). Ensure the 'Orchestrator' vibe is professional and high-fidelity.
+        4. GESHIDO ROADMAP: 
+           3 Phase Cards using <div class='phase-card'>...</div>. 
+           If a Pivot exists, list the 'Adaptation Logic' (what changed in ROI/Reach) at the start of Phase 1.
+
+        5. IMPACT TABLE: 
+           Use a standard HTML <table> with <thead> and <tbody>.
+           Columns: Metric, Current State, Target State (AI Impact), Data Logic.
+           Wrap Target State values in <span class='target-state'>...</span>.
+
+        STRICT: No stars (**). No markdown code blocks. Use professional, clinical executive language.
         """
         
         response = model.generate_content(prompt)
+        # Surgical cleanup of markdown artifacts to protect the UI
         return re.sub(r"```[a-z]*\n?|```|\*\*", "", response.text).strip()
     except Exception as e:
-        return f"Error: {str(e)}"
+        return f"<div style='color:red;'>Strategic Engine Error: {str(e)}</div>"
