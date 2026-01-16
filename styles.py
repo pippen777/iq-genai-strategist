@@ -23,7 +23,15 @@ def apply_iq_styles():
         font-weight: 800 !important;
     }
 
-    /* 3. BASE BUTTON & HOVER */
+    .step-header {
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        margin: 25px 0 15px 0;
+    }
+
+    /* 3. BASE BUTTON & KINETIC HOVER */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -42,10 +50,9 @@ def apply_iq_styles():
         box-shadow: 0 10px 25px rgba(0, 173, 239, 0.4) !important;
     }
 
-    /* 4. THE ULTIMATE SOLID BLUE LOCK */
-    /* This targets buttons that we manually tag with an 'active' label */
+    /* 4. SOLID BLUE SELECTION LOCK */
     .stButton button p:contains("✓") {
-        display: none !important; /* Hide the marker but keep the style */
+        display: none !important; 
     }
     
     .stButton:has(p:contains("✓")) button {
@@ -53,9 +60,16 @@ def apply_iq_styles():
         background-image: none !important;
         color: #05101b !important;
         border: none !important;
-        box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
+        box-shadow: 0 0 35px rgba(0, 173, 239, 0.8) !important;
         transform: translateY(-3px) scale(1.02) !important;
         font-weight: 800 !important;
+    }
+
+    /* 5. PRIMARY BUTTON */
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
+        height: 60px !important;
+        border-radius: 30px !important;
     }
     </style>
     """, unsafe_allow_html=True)
