@@ -5,38 +5,33 @@ import google.generativeai as genai
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
 
 def apply_iq_branding():
-    # Target specific button keys using Streamlit's internal 'st-key' prefix
-    st.markdown(f"""
+    st.markdown("""
     <style>
-    [data-testid="stSidebar"] {{ display: none !important; }}
-    .stApp {{ background: radial-gradient(circle at top right, #1a1b3a, #0b101b) !important; color: white !important; }}
-    .title-text {{ background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; font-weight: 800 !important; font-family: 'Arial Black', sans-serif !important; }}
+    [data-testid="stSidebar"] { display: none !important; }
+    .stApp { background: radial-gradient(circle at top right, #1a1b3a, #0b101b) !important; color: white !important; }
+    .title-text { background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; font-weight: 800 !important; font-family: 'Arial Black', sans-serif !important; }
     
     /* UNIVERSAL BUTTON STYLE */
-    div.stButton > button {{
+    div.stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 12px !important;
         height: 75px !important;
+        width: 100% !important;
         transition: all 0.4s ease !important;
-    }}
+    }
 
-    /* HOVER GLOW */
-    div.stButton > button:hover {{
-        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
-        border: none !important;
-        box-shadow: 0 10px 25px rgba(142, 45, 226, 0.5) !important;
-        transform: translateY(-3px) !important;
-    }}
-
-    /* SELECTED STATE: Force the active button to keep the glow */
-    div[data-testid="stButton"] button[aria-pressed="true"], 
-    .selected-glow div.stButton > button {{
+    /* HOVER & SELECTED GLOW */
+    div.stButton > button:hover, .selected-glow div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
         box-shadow: 0 10px 25px rgba(142, 45, 226, 0.7) !important;
-    }}
+        transform: translateY(-3px) !important;
+        color: white !important;
+    }
+
+    .stTextArea textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: white !important; border-radius: 12px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -67,13 +62,13 @@ opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖
 
 for i, (k, v) in enumerate(opts.items()):
     with m_cols[i]:
-        # Wrap the button in a div that applies the 'selected-glow' if selected
-        is_selected = st.session_state.get("maturity") == k
-        if is_selected: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
+        if st.session_state.get("maturity") == k:
+            st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
         if st.button(v, key=f"mat_{k}"):
             st.session_state.maturity = k
             st.rerun()
-        if is_selected: st.markdown('</div>', unsafe_allow_html=True)
+        if st.session_state.get("maturity") == k:
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # 5. STEP 2: INDUSTRY
 if "maturity" in st.session_state:
@@ -82,37 +77,37 @@ if "maturity" in st.session_state:
     inds = {"Fin": "🏦 Financial", "Ret": "🛒 Retail", "Tel": "📡 Telecoms", "Pub": "🏛️ Public", "Min": "⛏️ Mining"}
     for i, (k, v) in enumerate(inds.items()):
         with i_cols[i]:
-            is_selected = st.session_state.get("ind") == v
-            if is_selected: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
+            if st.session_state.get("ind") == v:
+                st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
             if st.button(v, key=f"ind_{k}"):
                 st.session_state.ind = v
                 st.rerun()
-            if is_selected: st.markdown('</div>', unsafe_allow_html=True)
+            if st.session_state.get("ind") == v:
+                st.markdown('</div>', unsafe_allow_html=True)
 
-# 6. STEP 3: GENERATE (FORCED V1 STABLE)
+# 6. STEP 3: GENERATE (LIVE MODEL DISCOVERY)
 if "ind" in st.session_state:
     st.markdown(f"**Path Locked:** `{st.session_state.ind}` | `{st.session_state.maturity}`")
     frictions = st.text_area("Friction Points:", placeholder="Define the blockers...")
     
     if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
         try:
-            # FIX: Configure to use stable Gemini 1.5 Flash
             genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
             
-            # Use 'gemini-1.5-flash' - research shows this is the most stable alias
-            model = genai.GenerativeModel('gemini-1.5-flash')
+            # FAIL-SAFE: List models to find the one your key supports
+            available_models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
             
+            # Priority list: 1.5 Flash -> 1.5 Pro -> Pro
+            target_model = 'models/gemini-1.5-flash' # Default
+            if 'models/gemini-1.5-flash' not in available_models:
+                target_model = available_models[0] # Take the first available stable model
+            
+            model = genai.GenerativeModel(target_model)
             response = model.generate_content(
                 f"Context: {load_knowledge()}\nIndustry: {st.session_state.ind}\nMaturity: {st.session_state.maturity}\nFrictions: {frictions}\nTask: 12-week roadmap."
             )
             st.markdown("---")
             st.markdown(response.text)
         except Exception as e:
-            # Fallback to gemini-pro if Flash remains region-locked
-            st.error(f"Primary Engine Restricted. Attempting Legacy Fallback...")
-            try:
-                model = genai.GenerativeModel('gemini-pro')
-                response = model.generate_content("...")
-                st.markdown(response.text)
-            except:
-                st.error(f"Final Engine Error: {e}")
+            st.error(f"Engine Error: {e}")
+            st.info(f"Available models for your key: {available_models}")
