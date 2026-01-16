@@ -93,13 +93,12 @@ if check_password():
         
 if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
             try:
-                # Initialize with the correct API Key from Secrets
+                # Initialize the client with your secret key
                 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
                 
-                # Use the clean model name "gemini-1.5-flash" 
-                # Ensure the 'models/' prefix is NOT included here
+                # Use the stable production name without prefixes
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-1.5-flash", 
                     contents=f"Strategist Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: Generate a 12-week GESHIDO roadmap."
                 )
                 
@@ -107,9 +106,7 @@ if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
                 st.markdown('<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
                 st.markdown(response.text)
                 
-                # Add a download button for the generated strategy
                 st.download_button("Download Strategy Brief", response.text, file_name=f"IQ_Strategy_{st.session_state.ind}.md")
 
             except Exception as e:
                 st.error(f"Engine Error: {e}")
-                st.info("Tip: Double-check your API Key in Google AI Studio. Ensure you are using a key from a 'Gemini API' project.")
