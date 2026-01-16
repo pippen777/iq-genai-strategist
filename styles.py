@@ -13,7 +13,7 @@ def apply_iq_styles():
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* THE 'AHA' HERO BOX */
+    /* THE MASSIVE 'AHA' HERO */
     .aha-box {
         padding: 45px;
         background: rgba(0, 173, 239, 0.08);
@@ -28,7 +28,8 @@ def apply_iq_styles():
         font-weight: 800 !important;
         line-height: 1.2 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
-        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     /* KINETIC BUTTONS */
@@ -41,26 +42,18 @@ def apply_iq_styles():
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
-    .stButton > button:hover {
-        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
-        transform: scale(1.05) translateY(-5px) !important;
-        box-shadow: 0 15px 35px rgba(0, 173, 239, 0.4) !important;
-        border: none !important;
-    }
-
-    /* THE "SELECTED" STATE WITH VISUAL CHECKMARK */
-    .stButton:has(div[data-testid="stMarkdown"] p:contains("SELECTED")) button {
+    /* THE SELECTION LOCK - PIXEL PERFECT */
+    /* This targets the button precisely when the 'SELECTED' marker is present */
+    div[data-testid="stVerticalBlock"] > div:has(p:contains("SELECTED")) + div .stButton button {
         background-color: #00ADEF !important;
         color: #05101b !important;
-        box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
         font-weight: 800 !important;
-    }
-
-    /* Adding the checkmark via CSS pseudo-element */
-    .stButton:has(div[data-testid="stMarkdown"] p:contains("SELECTED")) button::after {
-        content: " ✓";
-        font-size: 1.2rem;
-        font-weight: 900;
+        box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
+        /* This is a CSS-encoded checkmark graphic */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2305101b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
+        background-repeat: no-repeat !important;
+        background-position: right 15px center !important;
+        padding-right: 45px !important;
     }
 
     .selection-marker { display: none !important; }
