@@ -15,16 +15,17 @@ m_opts = {"Explorer": "EXPLORER", "Scaler": "SCALER", "Innovator": "INNOVATOR"}
 
 for i, (key, label) in enumerate(m_opts.items()):
     with m_cols[i]:
-        # Stable CSS hook instead of checkmark character
-        if st.session_state.get("maturity") == key:
-            st.markdown('<p class="selection-marker">SELECTED</p>', unsafe_allow_html=True)
+        is_active = st.session_state.get("maturity") == key
+        if is_active:
+            # Wrap the selected button in the CSS class container
+            st.markdown('<div class="selected-container">', unsafe_allow_html=True)
         
         if st.button(label, key=f"mat_{key}"):
             st.session_state.maturity = key
             st.rerun()
-
-if "maturity" not in st.session_state:
-    st.stop()
+            
+        if is_active:
+            st.markdown('</div>', unsafe_allow_html=True)
 
 # 02 / INDUSTRY
 st.markdown('<p class="step-header">02 / SELECT INDUSTRY</p>', unsafe_allow_html=True)
