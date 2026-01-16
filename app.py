@@ -26,7 +26,7 @@ def apply_iq_branding():
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 15px;
         padding: 25px;
-        height: 100%;
+        min-height: 400px;
         border-top: 4px solid #8E2DE2;
     }
     .metric-box {
@@ -35,6 +35,7 @@ def apply_iq_branding():
         padding: 15px;
         border-radius: 10px;
         margin: 10px 0;
+        font-weight: bold;
     }
 
     /* Interactive Buttons */
@@ -46,12 +47,17 @@ def apply_iq_branding():
         height: 70px !important;
         transition: all 0.4s ease !important;
     }
+    
+    /* Persistent Selection Glow */
     div.stButton > button:hover, .selected-glow div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
         box-shadow: 0 10px 25px rgba(142, 45, 226, 0.6) !important;
         transform: translateY(-3px) !important;
+        color: white !important;
     }
+
+    .stTextArea textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: white !important; border-radius: 12px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -76,16 +82,14 @@ def load_knowledge():
 st.markdown('<p class="title-text">Orchestrator</p>', unsafe_allow_html=True)
 
 # 4. STEP 1 & 2: INPUTS
-col_m1, col_m2 = st.columns([1, 1])
-with col_m1:
-    st.markdown('### Step 1: Diagnose Maturity')
-    m_cols = st.columns(3)
-    opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
-    for i, (k, v) in enumerate(opts.items()):
-        with m_cols[i]:
-            if st.session_state.get("maturity") == k: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
-            if st.button(v, key=f"m_{k}"): st.session_state.maturity = k; st.rerun()
-            if st.session_state.get("maturity") == k: st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('### Step 1: Diagnose Maturity')
+m_cols = st.columns(3)
+opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
+for i, (k, v) in enumerate(opts.items()):
+    with m_cols[i]:
+        if st.session_state.get("maturity") == k: st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
+        if st.button(v, key=f"m_{k}"): st.session_state.maturity = k; st.rerun()
+        if st.session_state.get("maturity") == k: st.markdown('</div>', unsafe_allow_html=True)
 
 if "maturity" in st.session_state:
     st.markdown('### Step 2: Select Industry Segment')
@@ -113,30 +117,43 @@ if "ind" in st.session_state:
             Context: {load_knowledge()}
             Friction: {frictions}
             
-            Generate an executive strategy:
-            1. [VISION] Bold AI North Star vision statement.
-            2. [METRIC] Realistic Before vs After metric (e.g. 5 days to 2 hours).
-            3. [MONTH1], [MONTH2], [MONTH3] Detailed bullets for Foundations, Value Drops, and Agentic Scaling.
+            Mandatory Dashboard Format:
+            [VISION] A bold 1-sentence AI North Star vision statement.
+            [METRIC] Before AI vs After 90 Days metric comparison.
+            [MONTH1] 4 bullets for Foundations.
+            [MONTH2] 4 bullets for Value Drops.
+            [MONTH3] 4 bullets for Agentic Scaling.
             """
             
             with st.spinner("Orchestrating Value..."):
                 res = model.generate_content(prompt).text
                 
+                # ROBUST SECTION PARSING
+                def extract(text, tag, end_tag=None):
+                    try:
+                        start = text.find(tag) + len(tag)
+                        end = text.find(end_tag) if end_tag else len(text)
+                        return text[start:end].strip()
+                    except: return "Pending synthesis..."
+
+                vision = extract(res, "[VISION]", "[METRIC]")
+                metric = extract(res, "[METRIC]", "[MONTH1]")
+                m1_val = extract(res, "[MONTH1]", "[MONTH2]")
+                m2_val = extract(res, "[MONTH2]", "[MONTH3]")
+                m3_val = extract(res, "[MONTH3]")
+
                 # EXECUTIVE DASHBOARD RENDERING
-                vision = res.split("[VISION]")[1].split("[METRIC]")[0].strip()
-                metric = res.split("[METRIC]")[1].split("[MONTH1]")[0].strip()
-                
                 st.markdown(f'<div class="vision-header"><h1>{vision}</h1></div>', unsafe_allow_html=True)
                 
+                st.success(f"**90-Day Impact Projection:** {metric}")
+
                 m1, m2, m3 = st.columns(3)
                 with m1:
-                    st.markdown(f'<div class="exec-card"><h3>🏗️ Month 1</h3><div class="metric-box"><b>Goal:</b> Foundations</div>{res.split("[MONTH1]")[1].split("[MONTH2]")[0]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="exec-card"><h3>🏗️ Month 1</h3><div class="metric-box">Goal: Foundations</div>{m1_val}</div>', unsafe_allow_html=True)
                 with m2:
-                    st.markdown(f'<div class="exec-card"><h3>🚀 Month 2</h3><div class="metric-box"><b>Goal:</b> Value Drops</div>{res.split("[MONTH2]")[1].split("[MONTH3]")[0]}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div class="exec-card"><h3>🚀 Month 2</h3><div class="metric-box">Goal: Value Drops</div>{m2_val}</div>', unsafe_allow_html=True)
                 with m3:
-                    st.markdown(f'<div class="exec-card"><h3>🤖 Month 3</h3><div class="metric-box"><b>Goal:</b> Agentic AI</div>{res.split("[MONTH3]")[1]}</div>', unsafe_allow_html=True)
-                
-                st.success(f"**90-Day Impact Projection:** {metric}")
+                    st.markdown(f'<div class="exec-card"><h3>🤖 Month 3</h3><div class="metric-box">Goal: Agentic Scaling</div>{m3_val}</div>', unsafe_allow_html=True)
 
         except Exception as e:
             st.error(f"Engine Error: {e}")
