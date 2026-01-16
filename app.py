@@ -38,7 +38,13 @@ if "ind" in st.session_state:
     st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem; margin-top:30px;">Step 3: Define Friction</p>', unsafe_allow_html=True)
     frictions = st.text_area("Identify strategic friction points:", height=150)
 
-    if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
-        res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
-        st.markdown("---")
-        st.write(res)
+if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
+    # Ensure ind and maturity are pulled from session_state
+    res = run_orchestrator(
+        st.session_state.ind, 
+        st.session_state.maturity, 
+        frictions
+    )
+    st.markdown("---")
+    st.markdown(f'<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
+    st.write(res)
