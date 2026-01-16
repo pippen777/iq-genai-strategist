@@ -27,6 +27,10 @@ def run_orchestrator(ind, maturity, frictions, user_feedback=None):
         2. 3 TENSIONS: Use <div class='blindspot-card'>...</div>.
         3. ROADMAP: 3 Phase Cards using <div class='phase-card'>...</div>.
         4. IMPACT TABLE: ROI metrics using <span class='target-state'>...</span> with Data Logic footnotes.
+           - You MUST use a standard <table> with <thead> and <tbody>.
+           - Column 1: Metric | Column 2: Current State | Column 3: Target State (AI Impact) | Column 4: Data Logic.
+           - Wrap the 'Target State' values in <span class='target-state'>...</span>.
+           - Ensure every <tr> and <td> tag is explicitly closed.
 
         STRICT: No stars (**). Ensure the 'Orchestrator' vibe is professional and high-fidelity.
         """
