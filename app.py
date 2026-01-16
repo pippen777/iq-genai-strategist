@@ -2,6 +2,7 @@ import streamlit as st
 from styles import apply_iq_styles
 from brain import run_orchestrator
 
+# Config must be first
 st.set_page_config(page_title="IQ Orchestrator", layout="wide")
 apply_iq_styles()
 
@@ -15,8 +16,7 @@ m_opts = {"Explorer": "EXPLORER", "Scaler": "SCALER", "Innovator": "INNOVATOR"}
 for i, (key, label) in enumerate(m_opts.items()):
     with m_cols[i]:
         is_selected = st.session_state.get("maturity") == key
-        display_label = f"{label} ✓" if is_selected else label
-        if st.button(display_label, key=f"mat_{key}"):
+        if st.button(f"{label} ✓" if is_selected else label, key=f"mat_{key}"):
             st.session_state.maturity = key
             st.rerun()
 
@@ -31,8 +31,7 @@ i_opts = {"Fin": "FINANCIAL", "Ret": "RETAIL", "Tel": "TELECOMS", "Pub": "PUBLIC
 for i, (key, label) in enumerate(i_opts.items()):
     with i_cols[i]:
         is_selected = st.session_state.get("ind") == label
-        display_label = f"{label} ✓" if is_selected else label
-        if st.button(display_label, key=f"ind_{key}"):
+        if st.button(f"{label} ✓" if is_selected else label, key=f"ind_{key}"):
             st.session_state.ind = label
             st.rerun()
 
@@ -41,18 +40,17 @@ if "ind" not in st.session_state:
 
 # 03 / STRATEGIC CONTEXT
 st.markdown('<p class="step-header">03 / DEFINE STRATEGIC FRICTION</p>', unsafe_allow_html=True)
-frictions = st.text_area("Identify the top friction points:", height=150, placeholder="Define the business blocker...")
+frictions = st.text_area("Identify strategic friction points:", height=150, placeholder="Define the business blocker...")
 
 if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
     if not frictions:
-        st.warning("Please provide context to ground the GESHIDO strategy.")
+        st.warning("Please provide context to ground the strategy.")
     else:
         progress_bar = st.progress(0)
         status = st.empty()
         status.markdown('<p style="color:#00ADEF;">Synthesizing IQ Strategy...</p>', unsafe_allow_html=True)
-        progress_bar.progress(30)
         
-        # Call the brain
+        # Run Orchestration
         res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
         
         progress_bar.progress(100)
