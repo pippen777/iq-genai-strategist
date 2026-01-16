@@ -32,36 +32,44 @@ def apply_iq_styles():
         -webkit-text-fill-color: transparent;
     }
 
-    /* KINETIC BUTTONS */
+    /* RESTORED KINETIC HOVER */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 12px !important;
-        height: 65px !important;
+        height: 65px !important; width: 100% !important;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
-    /* THE SELECTION LOCK - PIXEL PERFECT */
-    /* This targets the button precisely when the 'SELECTED' marker is present */
-    div[data-testid="stVerticalBlock"] > div:has(p:contains("SELECTED")) + div .stButton button {
+    .stButton > button:hover {
+        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
+        transform: scale(1.05) translateY(-5px) !important;
+        box-shadow: 0 15px 35px rgba(0, 173, 239, 0.4) !important;
+        border: none !important;
+    }
+
+    /* THE SELECTION LOCK (BLUE + CHECK) */
+    /* We use a specific div wrapper in app.py to trigger this */
+    .selected-btn div[data-testid="stButton"] button {
         background-color: #00ADEF !important;
         color: #05101b !important;
         font-weight: 800 !important;
         box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
-        /* This is a CSS-encoded checkmark graphic */
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2305101b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: right 15px center !important;
-        padding-right: 45px !important;
+        padding-right: 40px !important;
     }
 
-    .selection-marker { display: none !important; }
-    
-    .target-state {
-        color: #00ADEF !important;
-        font-weight: 900 !important;
-        text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
+    /* THE AWESOME ROADMAP BUTTON */
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
+        height: 70px !important;
+        border-radius: 35px !important;
+        font-size: 1.2rem !important;
+        letter-spacing: 2px !important;
+        border: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
