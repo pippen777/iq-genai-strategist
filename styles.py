@@ -32,13 +32,13 @@ def apply_iq_styles():
         -webkit-text-fill-color: transparent;
     }
 
-    /* RESTORED KINETIC HOVER */
+    /* KINETIC BUTTONS (Idle/Hover) */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         border-radius: 12px !important;
-        height: 65px !important; width: 100% !important;
+        height: 65px !important;
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
     }
 
@@ -49,26 +49,33 @@ def apply_iq_styles():
         border: none !important;
     }
 
-    /* THE SELECTION LOCK (BLUE + CHECK) */
-    /* We use a specific div wrapper in app.py to trigger this */
-    .selected-btn div[data-testid="stButton"] button {
+    /* THE SOLID BLUE LOCK */
+    /* We target buttons inside a div that we will mark with 'selected-container' */
+    div.selected-container .stButton > button {
         background-color: #00ADEF !important;
+        background-image: none !important;
         color: #05101b !important;
-        font-weight: 800 !important;
+        border: none !important;
         box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
+        font-weight: 800 !important;
+        /* Visual checkmark */
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2305101b' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E") !important;
         background-repeat: no-repeat !important;
         background-position: right 15px center !important;
         padding-right: 40px !important;
     }
 
-    /* THE AWESOME ROADMAP BUTTON */
+    .target-state {
+        color: #00ADEF !important;
+        font-weight: 900 !important;
+        text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
+    }
+    
+    /* THE ROADMAP BUTTON */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         height: 70px !important;
         border-radius: 35px !important;
-        font-size: 1.2rem !important;
-        letter-spacing: 2px !important;
         border: none !important;
     }
     </style>
