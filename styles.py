@@ -13,7 +13,35 @@ def apply_iq_styles():
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* THE AWESOME ROADMAP BUTTON */
+    /* 1. UNIVERSAL KINETIC HOVER (For Step 1 & 2 Buttons) */
+    .stButton > button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 12px !important;
+        height: 60px !important;
+        width: 100% !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        font-weight: 600 !important;
+    }
+
+    .stButton > button:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid #00ADEF !important;
+        transform: scale(1.05) translateY(-5px) !important;
+        box-shadow: 0 10px 20px rgba(0, 173, 239, 0.3) !important;
+    }
+
+    /* 2. THE SELECTED STATE (Solid Blue Lock) */
+    .stButton button:has(p:contains("✓")) {
+        background-color: #00ADEF !important;
+        color: #0b101b !important;
+        border: none !important;
+        box-shadow: 0 0 30px rgba(0, 173, 239, 0.6) !important;
+        transform: scale(1.02) !important;
+    }
+
+    /* 3. THE HERO ROADMAP BUTTON (Solid Gradient) */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #8E2DE2, #F02FC2) !important;
         color: white !important;
@@ -24,43 +52,37 @@ def apply_iq_styles():
         font-weight: 800 !important;
         letter-spacing: 2px !important;
         box-shadow: 0 10px 30px rgba(0, 173, 239, 0.4) !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        opacity: 1 !important; /* Forces it to be solid */
+        margin-top: 20px !important;
     }
     
     div.stButton > button[kind="primary"]:hover {
+        background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         transform: scale(1.05) translateY(-5px) !important;
         box-shadow: 0 20px 45px rgba(240, 47, 194, 0.6) !important;
-        color: white !important;
     }
 
-    /* THE 'AHA' MOMENT HERO */
+    /* 4. STRATEGIC OUTPUT CLASSES */
     .aha-box {
-        padding: 50px;
+        padding: 45px;
         background: rgba(0, 173, 239, 0.08);
-        border: 1px solid rgba(0, 173, 239, 0.2);
-        border-radius: 25px;
+        border-left: 8px solid #00ADEF;
+        border-radius: 20px;
         margin: 40px 0;
-        text-align: center;
     }
-
     .aha-text {
-        font-size: 2.6rem !important;
+        font-size: 2.4rem !important;
         font-weight: 800 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
-
-    /* PHASE CARDS & TARGET GLOW */
     .phase-card {
         background: rgba(255, 255, 255, 0.05) !important;
-        padding: 30px !important;
-        border-radius: 20px !important;
-        border-top: 5px solid #F02FC2 !important;
-        margin-bottom: 25px !important;
+        padding: 25px !important;
+        border-radius: 15px !important;
+        border-top: 4px solid #F02FC2 !important;
+        margin-bottom: 20px !important;
     }
-    
     .target-state {
         color: #00ADEF !important;
         font-weight: 900 !important;
