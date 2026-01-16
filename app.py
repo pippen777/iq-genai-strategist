@@ -8,29 +8,15 @@ def apply_iq_branding():
     st.markdown("""
     <style>
     [data-testid="stSidebar"] { display: none !important; }
-    .stApp { background: radial-gradient(circle at top right, #0b101b, #05070a) !important; color: #ffffff !important; font-family: 'Inter', sans-serif; }
+    .stApp { background: #05070a !important; color: #ffffff !important; font-family: 'Inter', sans-serif; }
     .title-text { background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3rem !important; font-weight: 800 !important; letter-spacing: -1px; }
     
     /* DASHBOARD CARDS */
-    .vision-header {
-        background: rgba(255, 255, 255, 0.03);
-        padding: 40px;
-        border-radius: 4px;
-        border: 1px solid rgba(0, 173, 239, 0.3);
-        text-align: center;
-        margin-bottom: 40px;
-    }
-    .exec-card {
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 30px;
-        border-radius: 4px;
-        min-height: 450px;
-    }
-    .card-label { color: #00ADEF; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
-    .metric-text { font-size: 1.1rem; color: #F02FC2; font-weight: 600; margin-bottom: 20px; }
-
-    /* THE BUTTON FIX: Force background when selected */
+    .vision-header { background: rgba(255, 255, 255, 0.03); padding: 40px; border-radius: 4px; border: 1px solid rgba(0, 173, 239, 0.3); text-align: center; margin-bottom: 40px; }
+    .exec-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.08); padding: 30px; border-radius: 4px; min-height: 400px; }
+    .card-label { color: #00ADEF; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; margin-bottom: 15px; }
+    
+    /* BUTTON PERSISTENCE FIX */
     div.stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: #ffffff !important;
@@ -40,17 +26,16 @@ def apply_iq_branding():
         transition: all 0.3s ease !important;
         text-transform: uppercase;
         font-size: 0.8rem !important;
-        letter-spacing: 1px;
     }
     
-    /* Target the specific selected state */
+    /* High-priority CSS to force color on selected state */
     .selected-glow div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2) !important;
         border: none !important;
-        box-shadow: 0 4px 15px rgba(0, 173, 239, 0.3) !important;
+        box-shadow: 0 4px 15px rgba(0, 173, 239, 0.4) !important;
     }
 
-    .stTextArea textarea { background: rgba(255,255,255,0.03) !important; color: white !important; border-radius: 4px !important; border: 1px solid rgba(255,255,255,0.1) !important; }
+    .stTextArea textarea { background: rgba(255,255,255,0.03) !important; color: white !important; border-radius: 4px !important; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -60,7 +45,7 @@ apply_iq_branding()
 if "password_correct" not in st.session_state:
     st.markdown('<h1 class="title-text">Strategy Vault</h1>', unsafe_allow_html=True)
     pwd = st.text_input("Access Code", type="password")
-    if st.button("Authenticate"):
+    if st.button("AUTHENTICATE"):
         if pwd == st.secrets.get("APP_PASSWORD", "iq-vision-2026"):
             st.session_state["password_correct"] = True
             st.rerun()
@@ -90,33 +75,38 @@ if "maturity" in st.session_state:
 
 # 4. ENGINE
 if "ind" in st.session_state:
-    frictions = st.text_area("Strategic Friction Points:", placeholder="Define the business blocker...")
+    frictions = st.text_area("Define Executive Friction Points:", placeholder="e.g. KYC latency leading to client drop-off...")
     
     if st.button("ORCHESTRATE STRATEGY", type="primary"):
         try:
+            # FIX: Forced Stable Initialization
             genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
             model = genai.GenerativeModel('gemini-1.5-flash')
             
             prompt = f"""
             Role: IQ Business Senior Strategist.
-            Client: {st.session_state.ind} Sector ({st.session_state.maturity} Maturity).
+            Industry: {st.session_state.ind} | Maturity: {st.session_state.maturity}
             Friction: {frictions}
             
-            Return content in this EXACT structure (No markdown stars):
-            [VISION] 1-sentence executive vision.
-            [METRIC] Before vs After metric comparison.
-            [MONTH1] 4 detailed bullet points.
-            [MONTH2] 4 detailed bullet points.
-            [MONTH3] 4 detailed bullet points.
+            Output strictly in this structure (Replace ** with <b> tags):
+            [VISION] 1-sentence North Star.
+            [METRIC] Before vs After.
+            [MONTH1] 4 bullet points.
+            [MONTH2] 4 bullet points.
+            [MONTH3] 4 bullet points.
             """
             
-            with st.spinner("Processing..."):
+            with st.spinner("Synthesizing..."):
                 res = model.generate_content(prompt).text
                 
+                # CLEAN EXTRACTION
                 def extract(text, tag, end_tag=None):
-                    start = text.find(tag) + len(tag)
-                    end = text.find(end_tag) if end_tag else len(text)
-                    return text[start:end].replace("**", "").strip()
+                    try:
+                        start = text.find(tag) + len(tag)
+                        end = text.find(end_tag) if end_tag else len(text)
+                        clean_text = text[start:end].strip()
+                        return clean_text.replace("**", "<b>").replace("</b><b>", "").replace("*", "")
+                    except: return "Analysis pending..."
 
                 vision = extract(res, "[VISION]", "[METRIC]")
                 metric = extract(res, "[METRIC]", "[MONTH1]")
@@ -124,7 +114,8 @@ if "ind" in st.session_state:
                 m2_val = extract(res, "[MONTH2]", "[MONTH3]")
                 m3_val = extract(res, "[MONTH3]")
 
-                st.markdown(f'<div class="vision-header"><h2 style="font-weight:300; letter-spacing:1px;">{vision}</h2></div>', unsafe_allow_html=True)
+                # RENDERING DASHBOARD
+                st.markdown(f'<div class="vision-header"><h2 style="font-weight:300;">{vision}</h2></div>', unsafe_allow_html=True)
                 st.markdown(f'<div style="text-align:center; margin-bottom:40px;"><p class="card-label">90-Day Impact Projection</p><h2 style="color:#00ADEF;">{metric}</h2></div>', unsafe_allow_html=True)
 
                 c1, c2, c3 = st.columns(3)
