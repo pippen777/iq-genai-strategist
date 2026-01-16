@@ -2,7 +2,6 @@ import google.generativeai as genai
 import streamlit as st
 
 def get_knowledge():
-    """Restores Knowledge Grounding"""
     try:
         with open("knowledge/iq_frameworks.txt", "r") as f:
             return f.read()
@@ -14,19 +13,27 @@ def run_orchestrator(ind, maturity, frictions):
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         knowledge = get_knowledge()
         
-        models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        target = 'models/gemini-1.5-flash' if 'models/gemini-1.5-flash' in models else models[0]
-        model = genai.GenerativeModel(target)
+        model = genai.GenerativeModel('models/gemini-1.5-flash')
         
         prompt = f"""
-        System: Senior AI Strategist at IQ Business. Grounding: {knowledge}
-        Context: Industry {ind} | Maturity {maturity}.
+        Role: Senior AI Strategist at IQ Business. 
+        Framework: GESHIDO® (Value Weekly, Foundations Monthly).
+        Context: {ind} | {maturity} Maturity.
         Friction: {frictions}
+
+        TASK: Generate a high-impact dashboard using HTML/inline CSS for Streamlit markdown.
         
-        Task: 12-Week Roadmap divided into:
-        Month 1 (Value), Month 2 (Scale), Month 3 (Govern).
-        Alignment: GESHIDO Philosophy.
-        Format: Strictly clean text (no stars **).
+        REQUIREMENTS:
+        1. THE 'AHA' MOMENT: A single sentence in a large, glowing blue callout box.
+        2. 12-WEEK ROADMAP CARDS: Use 3 distinct HTML divs (Cards) for:
+           - Month 1: VALUE (The Quick Win)
+           - Month 2: SCALE (The Integration)
+           - Month 3: GOVERN (The Foundation)
+        3. GESHIDO METRICS: A clean table showing Before vs. After impact.
+
+        STYLING:
+        - Use border-radius: 15px, background: rgba(255,255,255,0.05), and border-top: 4px solid #00ADEF.
+        - Avoid all stars (**). Use <h3> tags for headers.
         """
         return model.generate_content(prompt).text
     except Exception as e:
