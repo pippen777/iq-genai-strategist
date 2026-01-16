@@ -12,7 +12,31 @@ def apply_iq_styles():
         color: white !important;
         font-family: 'Outfit', sans-serif !important;
     }
+/* Add this to your styles.py <style> block */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.03); /* Frosted glass base */
+    border-radius: 8px;
+    overflow: hidden;
+}
 
+th {
+    background: rgba(0, 173, 239, 0.2) !important; /* IQ Blue header tint */
+    color: #00ADEF !important;
+    text-align: left;
+    padding: 15px !important;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+td {
+    padding: 15px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+    font-size: 14px;
+}
     /* THE 'FORCE-HOVER' SELECTOR */
     /* We target the button and its internal paragraph to ensure the color sticks */
     div[data-testid="stButton"] button:hover {
