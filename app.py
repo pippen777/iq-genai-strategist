@@ -66,3 +66,29 @@ if check_password():
     if st.session_state.get("res"):
         st.markdown("---")
         st.markdown(st.session_state.res, unsafe_allow_html=True)
+   
+# --- Bottom of app.py ---
+
+if st.session_state.get("res"):
+    st.markdown("---")
+    # This renders the Roadmap, Executive Brief, and Reasoning Engine
+    st.markdown(st.session_state.res, unsafe_allow_html=True)
+    
+    st.markdown('<p class="step-header">STRATEGY PIVOT: CHALLENGE THE ENGINE</p>', unsafe_allow_html=True)
+    
+    # We use a container to ensure the pivot elements stay together
+    with st.container():
+        pivot_input = st.text_input("What if the CRO cuts the data pool? What if compliance says no?", key="strategy_pivot_input")
+        
+        if st.button("RE-ORCHESTRATE STRATEGY"):
+            if pivot_input:
+                with st.spinner("Adapting Logic and Recalculating ROI..."):
+                    # We pass the original frictions + the new pivot feedback
+                    new_res = run_orchestrator(
+                        st.session_state.ind, 
+                        st.session_state.mat, 
+                        frictions, 
+                        user_feedback=pivot_input
+                    )
+                    st.session_state.res = new_res
+                    st.rerun() # Force refresh to show the adapted strategy
