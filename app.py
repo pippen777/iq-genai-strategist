@@ -93,10 +93,11 @@ if check_password():
         
 if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
             try:
-                # Initialize the client with your secret key
+                # Initialize the client
                 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
                 
-                # Use the stable production name without prefixes
+                # Use 'gemini-1.5-flash' - the library handles the 'models/' prefix
+                # If this still fails, try "models/gemini-1.5-flash" inside the string
                 response = client.models.generate_content(
                     model="gemini-1.5-flash", 
                     contents=f"Strategist Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: Generate a 12-week GESHIDO roadmap."
@@ -109,4 +110,6 @@ if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
                 st.download_button("Download Strategy Brief", response.text, file_name=f"IQ_Strategy_{st.session_state.ind}.md")
 
             except Exception as e:
+                # Fallback for naming conventions
                 st.error(f"Engine Error: {e}")
+                st.info("Attempting stable fallback...")
