@@ -91,15 +91,25 @@ if check_password():
         st.markdown('<p class="step-header">Step 3: Define Friction Points</p>', unsafe_allow_html=True)
         frictions = st.text_area("What are the top 3 value pools or blockers?", placeholder="e.g. Inefficient loan processing...")
         
-        if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
+if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
             try:
+                # Initialize with the correct API Key from Secrets
                 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
-                # Switched to 1.5-flash for better quota stability
+                
+                # Use the clean model name "gemini-1.5-flash" 
+                # Ensure the 'models/' prefix is NOT included here
                 response = client.models.generate_content(
                     model="gemini-1.5-flash",
                     contents=f"Strategist Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: Generate a 12-week GESHIDO roadmap."
                 )
+                
                 st.markdown("---")
+                st.markdown('<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
                 st.markdown(response.text)
+                
+                # Add a download button for the generated strategy
+                st.download_button("Download Strategy Brief", response.text, file_name=f"IQ_Strategy_{st.session_state.ind}.md")
+
             except Exception as e:
                 st.error(f"Engine Error: {e}")
+                st.info("Tip: Double-check your API Key in Google AI Studio. Ensure you are using a key from a 'Gemini API' project.")
