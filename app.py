@@ -21,17 +21,36 @@ for i, (key, label) in enumerate(m_opts.items()):
             st.rerun()
 
 # STEP 2: INDUSTRY
-if "maturity" in st.session_state:
-    st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem; margin-top:30px;">Step 2: Industry Segment</p>', unsafe_allow_html=True)
-    i_cols = st.columns(5)
-    i_opts = {"Fin": "FINANCIAL", "Ret": "RETAIL", "Tel": "TELECOMS", "Pub": "PUBLIC", "Min": "MINING"}
+# ... (Maturity and Industry button loops remain the same)
+
+# ONLY show Step 3 if both previous selections are made
+if "maturity" in st.session_state and "ind" in st.session_state:
+    st.markdown('<p class="step-header">Step 3: Define Strategic Friction</p>', unsafe_allow_html=True)
     
-    for i, (key, label) in enumerate(i_opts.items()):
-        with i_cols[i]:
-            display_label = f"{label} ✓" if st.session_state.get("ind") == label else label
-            if st.button(display_label, key=f"ind_{key}"):
-                st.session_state.ind = label
-                st.rerun()
+    # Use a unique key for the text area to prevent ghost rendering
+    frictions = st.text_area(
+        "Identify the top friction points or value pools:", 
+        height=150, 
+        placeholder="e.g. Manual claims processing is causing a 14-day delay...",
+        key="friction_input"
+    )
+
+    # The Roadmap button now only appears when we have data
+    if st.button("⚡ ORCHESTRATE ROADMAP", type="primary", key="final_orchestrate"):
+        if not frictions:
+            st.warning("Please provide context to ground the GESHIDO strategy.")
+        else:
+            with st.spinner("Synthesizing IQ Strategy..."):
+                res = run_orchestrator(
+                    st.session_state.ind, 
+                    st.session_state.maturity, 
+                    frictions
+                )
+                st.markdown("---")
+                # Restore the high-end title for the output
+                st.markdown('<p class="title-text" style="font-size: 2.2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
+                st.write(res)
+                st.caption("© 2026 iqbusiness | GenAI Keys to Winning Operating System™")
 
 # STEP 3: CONTEXT
 if "ind" in st.session_state:
