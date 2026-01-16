@@ -7,14 +7,12 @@ def apply_iq_styles():
     
     [data-testid="stSidebar"] { display: none !important; }
     
-    /* RESTORED: Midnight Dark Background */
     .stApp {
         background: radial-gradient(circle at top right, #1a1b3a, #0b101b) !important;
         color: white !important;
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* RESTORED: Digital Integrator Gradient */
     .title-text {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2);
         -webkit-background-clip: text;
@@ -31,7 +29,7 @@ def apply_iq_styles():
         margin: 25px 0 10px 0;
     }
 
-    /* RESTORED: THE "WOW" BUTTON */
+    /* THE BASE BUTTON */
     div.stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -43,24 +41,26 @@ def apply_iq_styles():
         font-weight: 600 !important;
     }
 
-    /* RESTORED: Kinetic Hover State */
+    /* THE HOVER STATE (THE "BEAUTIFUL" LOOK) */
     div.stButton > button:hover {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
         transform: translateY(-5px) scale(1.02) !important;
-        box-shadow: 0 15px 30px rgba(142, 45, 226, 0.4) !important;
+        box-shadow: 0 15px 30px rgba(142, 45, 226, 0.5) !important;
         color: white !important;
     }
 
-    /* RESTORED: Persistent Selection Glow */
+    /* THE RESEARCH FIX: LOCKING THE HOVER STATE UPON SELECTION */
+    /* This targets the button inside the 'selected-btn' div wrapper */
     .selected-btn div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
-        box-shadow: 0 0 40px rgba(0, 173, 239, 0.6) !important;
-        transform: scale(1.03) !important;
+        transform: translateY(-5px) scale(1.02) !important; /* Keeps the 'lift' active */
+        box-shadow: 0 0 40px rgba(0, 173, 239, 0.6) !important; /* Intense neon glow */
+        color: white !important;
+        font-weight: 800 !important;
     }
 
-    /* RESTORED: Primary Action Button */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         height: 60px !important;
@@ -68,7 +68,6 @@ def apply_iq_styles():
         margin-top: 20px;
     }
 
-    /* Glassmorphism Inputs */
     .stTextArea textarea {
         background-color: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
