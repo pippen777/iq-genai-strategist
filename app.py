@@ -2,7 +2,7 @@ import streamlit as st
 from google import genai
 import os
 
-# 1. PAGE CONFIG & DIGITAL INTEGRATOR BRANDING
+# 1. PAGE CONFIG & MODERN BRANDING
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
 
 def apply_iq_branding():
@@ -49,7 +49,7 @@ def apply_iq_branding():
         font-size: 1rem !important;
     }
 
-    /* THE "WOW" HOVER STATE (Mimics iqbusiness.net/automation) */
+    /* THE HOVER STATE */
     div.stButton > button:hover {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
@@ -58,7 +58,7 @@ def apply_iq_branding():
         color: white !important;
     }
 
-    /* PRIMARY ACTION BUTTON (The Orchestrate Button) */
+    /* PRIMARY ACTION BUTTON */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         height: 60px !important;
@@ -79,10 +79,10 @@ apply_iq_branding()
 
 # 2. SECURE ACCESS GATE
 def check_password():
-    # NEW: Allow pings to keep the app awake without a password
+    # Handle Bot Wake-up Pings
     if st.query_params.get("wake") == "true":
-        st.write("Engine Warmed.")
-        return False 
+        st.markdown('<p class="title-text" style="font-size: 1.5rem !important;">GESHIDO Engine: Warm</p>', unsafe_allow_html=True)
+        st.stop() # Prevents the rest of the app from running for the bot
 
     if "password_correct" not in st.session_state:
         st.markdown('<h1 class="title-text">Strategy Vault</h1>', unsafe_allow_html=True)
@@ -95,6 +95,8 @@ def check_password():
                 st.error("Access Denied.")
         return False
     return True
+
+if check_password():
     # 3. KNOWLEDGE BASE GROUNDING
     def load_iq_knowledge():
         try:
@@ -109,7 +111,6 @@ def check_password():
     st.markdown('<p class="title-text">Orchestrator</p>', unsafe_allow_html=True)
     st.markdown('<p class="step-header">Step 1: Diagnose Maturity</p>', unsafe_allow_html=True)
 
-    # Maturity Cards
     col1, col2, col3 = st.columns(3)
     with col1:
         if st.button("🔭 EXPLORER\n(Hype & Ambiguity)", key="exp"):
@@ -121,12 +122,11 @@ def check_password():
         if st.button("🤖 INNOVATOR\n(Agentic Future)", key="inn"):
             st.session_state.maturity = "Innovator"
 
-    # 5. STRATEGY INPUTS
     if "maturity" in st.session_state:
         st.markdown(f"**Diagnostic Result:** `{st.session_state.maturity.upper()}`")
         st.markdown('<p class="step-header">Step 2: Design Context</p>', unsafe_allow_html=True)
         
-        industry = st.text_input("Industry Segment", placeholder="e.g. Financial Services")
+        industry = st.text_input("Industry Segment", placeholder="e.g. Retail, Financial Services")
         frictions = st.text_area("Identify the top 3 friction points or value pools:", height=150)
 
         # 6. GENERATION LOGIC (Gemini 2.0 Flash)
@@ -148,9 +148,8 @@ def check_password():
                     
                     SECTIONS REQUIRED:
                     1. The 'Aha' Moment: Strategic Intent
-                    2. 12-Week Roadmap: Divided into Month 1 (Value), Month 2 (Scale), Month 3 (Govern)
-                    3. Secure & Responsible AI: POPIA and ethical guardrails.
-                    4. GESHIDO Metrics: 3 OKRs to track success.
+                    2. 12-Week Roadmap (Month 1, 2, 3)
+                    3. Secure & Responsible AI (POPIA compliance).
                     """
 
                     with st.spinner("Synthesizing IQ Strategy..."):
@@ -158,13 +157,11 @@ def check_password():
                             model="gemini-2.0-flash",
                             contents=system_instructions
                         )
-                        
                         st.markdown("---")
                         st.markdown('<p class="title-text" style="font-size: 2rem !important;">Acceleration Roadmap</p>', unsafe_allow_html=True)
                         st.markdown(response.text)
                 except Exception as e:
                     st.error(f"Engine Error: {e}")
 
-    # Branding Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.caption("© 2026 iqbusiness | GenAI Keys to Winning Operating System™")
