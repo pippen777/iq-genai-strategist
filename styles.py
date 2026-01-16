@@ -13,7 +13,28 @@ def apply_iq_styles():
         font-family: 'Outfit', sans-serif !important;
     }
 
-    /* VISIONARY 'AHA' HERO */
+    /* THE AWESOME ROADMAP BUTTON */
+    div.stButton > button[kind="primary"] {
+        background: linear-gradient(45deg, #00ADEF, #8E2DE2, #F02FC2) !important;
+        color: white !important;
+        height: 70px !important;
+        border-radius: 35px !important;
+        border: none !important;
+        font-size: 1.3rem !important;
+        font-weight: 800 !important;
+        letter-spacing: 2px !important;
+        box-shadow: 0 10px 30px rgba(0, 173, 239, 0.4) !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        opacity: 1 !important; /* Forces it to be solid */
+    }
+    
+    div.stButton > button[kind="primary"]:hover {
+        transform: scale(1.05) translateY(-5px) !important;
+        box-shadow: 0 20px 45px rgba(240, 47, 194, 0.6) !important;
+        color: white !important;
+    }
+
+    /* THE 'AHA' MOMENT HERO */
     .aha-box {
         padding: 50px;
         background: rgba(0, 173, 239, 0.08);
@@ -21,66 +42,29 @@ def apply_iq_styles():
         border-radius: 25px;
         margin: 40px 0;
         text-align: center;
-        box-shadow: 0 0 60px rgba(0, 173, 239, 0.15);
     }
 
     .aha-text {
         font-size: 2.6rem !important;
         font-weight: 800 !important;
-        line-height: 1.2 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    /* EXECUTIVE PHASE CARDS */
+    /* PHASE CARDS & TARGET GLOW */
     .phase-card {
         background: rgba(255, 255, 255, 0.05) !important;
         padding: 30px !important;
         border-radius: 20px !important;
         border-top: 5px solid #F02FC2 !important;
         margin-bottom: 25px !important;
-        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-        backdrop-filter: blur(4px);
     }
-
-    .phase-card h3 {
-        color: #F02FC2 !important;
-        margin-top: 0 !important;
-        font-size: 1.6rem !important;
-        font-weight: 700 !important;
-    }
-
-    /* TARGET ROI GLOW */
+    
     .target-state {
         color: #00ADEF !important;
         font-weight: 900 !important;
         text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
-    }
-
-    /* KINETIC BUTTONS */
-    .stButton > button {
-        background: rgba(255, 255, 255, 0.05) !important;
-        color: white !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 12px !important;
-        height: 60px !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    }
-
-    .stButton > button:hover {
-        background: linear-gradient(to right, #00ADEF, #F02FC2) !important;
-        transform: scale(1.05) translateY(-5px) !important;
-        box-shadow: 0 15px 35px rgba(0, 173, 239, 0.4) !important;
-        border: none !important;
-    }
-
-    /* SELECTION LOCK */
-    .stButton button:has(p:contains("✓")) {
-        background-color: #00ADEF !important;
-        color: #0b101b !important;
-        font-weight: 800 !important;
-        box-shadow: 0 0 30px rgba(0, 173, 239, 0.8) !important;
     }
     </style>
     """, unsafe_allow_html=True)
