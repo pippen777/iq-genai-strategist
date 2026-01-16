@@ -10,33 +10,34 @@ def run_orchestrator(ind, maturity, frictions):
         model = genai.GenerativeModel(target_model)
         
         prompt = f"""
-        System: You are a Senior AI Strategist at IQ Business. 
+        System: Senior AI Strategist at IQ Business. 
         Framework: GESHIDO® (Value Weekly, Foundations Monthly).
         Context: Industry: {ind} | Maturity: {maturity} | Friction: {frictions}
 
-        TASK: Generate a 12-week roadmap as a set of HTML Cards. 
+        TASK: Generate a 12-week roadmap using HTML Cards for a Streamlit dashboard.
         
-        STYLING REQUIREMENTS:
-        - Box: <div style="padding:25px; background:rgba(0,173,239,0.1); border-left:5px solid #00ADEF; border-radius:15px; margin-bottom:30px;">
-        - Cards: <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; border-top:4px solid #F02FC2; margin-bottom:15px;">
+        STRUCTURE:
+        1. THE 'AHA' MOMENT: One bold sentence in a blue callout.
+        2. PHASE CARDS: Month 1 (Value), Month 2 (Scale), Month 3 (Govern).
+        3. IMPACT TABLE: A clean Now vs Target table.
+
+        STRICT STYLING (Inline CSS):
+        - Aha Box: <div style="padding:25px; background:rgba(0,173,239,0.1); border-left:5px solid #00ADEF; border-radius:15px; margin-bottom:30px; color:white;">
+        - Phase Cards: <div style="background:rgba(255,255,255,0.05); padding:20px; border-radius:12px; border-top:4px solid #F02FC2; margin-bottom:15px; color:white;">
         
-        STRICT RULES:
-        1. DO NOT include <html>, <head>, or <body> tags. 
-        2. DO NOT use markdown code blocks (```).
-        3. Provide ONLY the <div> containers and the table.
-        4. Use <h3> for titles. No stars (**).
+        RULES:
+        - DO NOT use markdown code blocks (no backticks ```).
+        - DO NOT include <html> or <body> tags.
+        - Use <h3> for titles. No stars (**).
         """
         
         response = model.generate_content(prompt)
-        raw_text = response.text
+        text = response.text
         
-        # CLEANUP: Remove common AI wrappers
-        clean_res = re.sub(r"```html|```", "", raw_text) # Strip backticks
-        clean_res = re.sub(r"<!DOCTYPE.*?>", "", clean_res, flags=re.DOTALL) # Strip DOCTYPE
-        clean_res = re.sub(r"<html.*?>|</html>", "", clean_res, flags=re.DOTALL) # Strip html tags
-        clean_res = re.sub(r"<head.*?>.*?</head>", "", clean_res, flags=re.DOTALL) # Strip head/style
-        clean_res = re.sub(r"<body.*?>|</body>", "", clean_res, flags=re.DOTALL) # Strip body tags
+        # SURGICAL CLEANUP: Strips backticks and language identifiers
+        clean_res = re.sub(r"```[a-z]*\n?", "", text) 
+        clean_res = clean_res.replace("```", "").strip()
         
-        return clean_res.strip()
+        return clean_res
     except Exception as e:
-        return f"Engine Alignment Error: {str(e)}"
+        return f'<div style="color:red;">Engine Error: {str(e)}</div>'
