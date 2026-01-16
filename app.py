@@ -96,10 +96,10 @@ if check_password():
         
         if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
             try:
-                # Use the stable SDK initialization
+                # Direct Client setup to avoid v1beta issues
                 client = genai.Client(api_key=st.secrets["GEMINI_API_KEY"])
                 
-                # RE-FIX: Standardize model name for the SDK
+                # Use "gemini-1.5-flash" - the latest SDK handles the rest
                 response = client.models.generate_content(
                     model="gemini-1.5-flash",
                     contents=f"Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: 12-week roadmap."
