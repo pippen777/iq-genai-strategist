@@ -59,7 +59,20 @@ def apply_iq_styles():
         border: none !important;
         box-shadow: 0 10px 30px rgba(0, 173, 239, 0.4) !important;
     }
+/* Add this inside the <style> tag in styles.py */
+.blindspot-card {
+    background: rgba(240, 47, 194, 0.05) !important;
+    border: 1px solid #F02FC2 !important;
+    padding: 20px !important;
+    border-radius: 12px !important;
+    margin: 20px 0 !important;
+    color: #FFFFFF !important;
+}
 
+.aha-box h3 {
+    color: #00ADEF !important;
+    margin-top: 0 !important;
+}
     /* OUTPUT STYLING */
     .aha-box { padding: 40px; background: rgba(0, 173, 239, 0.08); border-left: 8px solid #00ADEF; border-radius: 20px; margin: 30px 0; }
     .aha-text { font-size: 2.2rem !important; font-weight: 800; background: linear-gradient(90deg, #00ADEF, #FFFFFF); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
