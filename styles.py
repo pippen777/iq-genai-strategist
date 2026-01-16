@@ -3,86 +3,71 @@ import streamlit as st
 def apply_iq_styles():
     st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
-    
-    [data-testid="stSidebar"] { display: none !important; }
-    
-    /* THE LIQUID SPACE BACKGROUND */
-    .stApp { 
-        background: #05070a !important; 
+    /* 1. OVERRIDE GLOBAL THEME */
+    html, body, [data-testid="stAppViewContainer"] {
+        background-color: #05070a !important;
         background-image: 
-            radial-gradient(at 0% 0%, rgba(0, 173, 239, 0.15) 0px, transparent 50%), 
-            radial-gradient(at 100% 100%, rgba(240, 47, 194, 0.15) 0px, transparent 50%) !important;
-        font-family: 'Outfit', sans-serif !important; 
+            radial-gradient(at 0% 0%, rgba(0, 173, 239, 0.2) 0px, transparent 50%), 
+            radial-gradient(at 100% 100%, rgba(240, 47, 194, 0.2) 0px, transparent 50%) !important;
     }
+
+    /* 2. HIDE DEFAULTS */
+    [data-testid="stHeader"], [data-testid="stSidebar"] { display: none !important; }
+
+    /* 3. TYPOGRAPHY */
+    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap');
+    * { font-family: 'Outfit', sans-serif !important; color: white !important; }
     
-    /* THE BRANDED GRADIENT TITLE */
     .title-text { 
         background: linear-gradient(90deg, #00ADEF, #8E2DE2, #F02FC2); 
         -webkit-background-clip: text; 
         -webkit-text-fill-color: transparent; 
-        font-size: 4rem !important; 
-        font-weight: 900 !important; 
-        letter-spacing: -3px;
-        filter: drop-shadow(0 0 15px rgba(142, 45, 226, 0.3));
+        font-size: 4rem !important; font-weight: 900 !important; letter-spacing: -3px;
+        margin-bottom: 20px;
     }
 
-    /* KINETIC BUTTONS: HOVER & SELECTION */
-    /* Target specifically to override Streamlit defaults */
-    div.stButton > button {
+    /* 4. THE BUTTONS: FORCE HOVER & SELECTED */
+    /* Target the button container specifically to fight Streamlit's internal CSS */
+    .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: rgba(255, 255, 255, 0.7) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 8px !important; 
-        height: 65px !important; 
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 4px !important;
+        height: 65px !important;
         width: 100% !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-weight: 600 !important;
+        transition: all 0.3s ease-in-out !important;
+        text-transform: uppercase !important;
+        letter-spacing: 2px !important;
     }
-    
-    /* HOVER STATE: THE IQ BLUE GLOW */
-    div.stButton > button:hover {
+
+    /* FORCE HOVER COLOR */
+    .stButton > button:hover {
         border-color: #00ADEF !important;
-        color: #ffffff !important;
-        background: rgba(0, 173, 239, 0.1) !important;
-        box-shadow: 0 0 30px rgba(0, 173, 239, 0.4) !important;
-        transform: translateY(-5px) scale(1.02) !important;
+        background: rgba(0, 173, 239, 0.2) !important;
+        box-shadow: 0 0 25px rgba(0, 173, 239, 0.5) !important;
+        transform: translateY(-3px) !important;
+        color: white !important;
     }
 
-    /* SELECTED STATE: NEON PERMANENCE */
-    /* This class is applied via the wrapper in app.py */
-    .selected-btn div.stButton > button {
+    /* FORCE SELECTED COLOR */
+    .selected-btn .stButton > button {
         background: linear-gradient(90deg, #00ADEF, #8E2DE2) !important;
-        color: #ffffff !important;
+        color: white !important;
         border: none !important;
-        font-weight: 800 !important;
-        box-shadow: 0 0 40px rgba(142, 45, 226, 0.6) !important;
-        transform: scale(1.05) !important;
+        box-shadow: 0 0 40px rgba(142, 45, 226, 0.7) !important;
+        transform: scale(1.03) !important;
     }
 
-    /* DASHBOARD: FROSTED GLASS CARDS */
+    /* 5. DASHBOARD CARDS */
     .vision-container { 
-        background: rgba(255, 255, 255, 0.02); 
-        backdrop-filter: blur(20px);
-        padding: 60px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1);
-        text-align: center; margin: 40px 0;
-        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(25px);
+        padding: 50px; border: 1px solid rgba(255, 255, 255, 0.1);
+        text-align: center; margin: 40px 0; border-radius: 8px;
     }
-    
     .phase-card { 
-        background: rgba(255, 255, 255, 0.01); 
-        padding: 40px; border-radius: 20px; 
-        border-top: 4px solid #00ADEF;
-        min-height: 450px;
-        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.02); padding: 35px; border-radius: 8px;
+        border-top: 4px solid #00ADEF; min-height: 420px;
     }
-    .phase-card:hover { border-top: 4px solid #F02FC2; background: rgba(255, 255, 255, 0.03); }
-
-    .label-accent { 
-        color: #00ADEF; text-transform: uppercase; 
-        font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; 
-    }
+    .label-accent { color: #00ADEF; font-size: 0.75rem; font-weight: 800; letter-spacing: 4px; }
     </style>
     """, unsafe_allow_html=True)
