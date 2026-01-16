@@ -8,21 +8,26 @@ apply_iq_styles()
 st.markdown('<h1 class="title-text">Orchestrator</h1>', unsafe_allow_html=True)
 
 # STEP 1: MATURITY (Icons Removed)
-st.markdown('<p style="color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:2px; font-size:0.8rem;">Step 1: Diagnose Maturity</p>', unsafe_allow_html=True)
+st.markdown('<p class="step-header">Step 1: Diagnose Maturity</p>', unsafe_allow_html=True)
 m_cols = st.columns(3)
 m_opts = {"Explorer": "EXPLORER", "Scaler": "SCALER", "Innovator": "INNOVATOR"}
 
 for i, (key, label) in enumerate(m_opts.items()):
     with m_cols[i]:
-        # Logic to lock the beautiful hover style
-        if st.session_state.get("maturity") == key:
+        # 1. Determine if this button IS the selected one
+        is_selected = st.session_state.get("maturity") == key
+        
+        # 2. If selected, wrap it in the 'locked-selection' div BEFORE rendering
+        if is_selected:
             st.markdown('<div class="locked-selection">', unsafe_allow_html=True)
         
+        # 3. Render the button
         if st.button(label, key=f"btn_{key}"):
             st.session_state.maturity = key
             st.rerun()
             
-        if st.session_state.get("maturity") == key:
+        # 4. Close the div only if it was opened
+        if is_selected:
             st.markdown('</div>', unsafe_allow_html=True)
 
 # STEP 2: INDUSTRY (Icons Removed)
