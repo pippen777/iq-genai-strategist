@@ -2,7 +2,7 @@ import google.generativeai as genai
 import streamlit as st
 
 def get_knowledge():
-    """Restores the Knowledge Base Grounding"""
+    """Restores Knowledge Grounding"""
     try:
         with open("knowledge/iq_frameworks.txt", "r") as f:
             return f.read()
@@ -14,7 +14,6 @@ def run_orchestrator(ind, maturity, frictions):
         genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
         knowledge = get_knowledge()
         
-        # Discovery prevents 404
         models = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
         target = 'models/gemini-1.5-flash' if 'models/gemini-1.5-flash' in models else models[0]
         model = genai.GenerativeModel(target)
