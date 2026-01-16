@@ -1,5 +1,6 @@
 import streamlit as st
-import google.generativeai as genai
+from google import genai
+from google.genai import types
 
 # 1. PAGE CONFIG & BRANDING
 st.set_page_config(page_title="IQ Strategy Orchestrator", page_icon="🧠", layout="wide")
@@ -23,7 +24,7 @@ def apply_iq_branding():
         font-weight: 600 !important;
     }
 
-    /* HOVER & SELECTED STATE (The IQ Automation Glow) */
+    /* HOVER & PERSISTENT SELECTED STATE */
     div.stButton > button:hover, .selected-btn div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
@@ -50,7 +51,7 @@ if "password_correct" not in st.session_state:
             st.error("Invalid Access Code.")
     st.stop()
 
-# 3. KNOWLEDGE BASE
+# 3. KNOWLEDGE LOADER
 def load_knowledge():
     try:
         with open("knowledge/iq_frameworks.txt", "r") as f: return f.read()
@@ -58,14 +59,13 @@ def load_knowledge():
 
 st.markdown('<p class="title-text">Orchestrator</p>', unsafe_allow_html=True)
 
-# 4. STEP 1: MATURITY (3-column layout)
+# 4. STEP 1: MATURITY (With Permanent Highlight)
 st.markdown('### Step 1: Diagnose Maturity')
 m_cols = st.columns(3)
-maturity_options = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
+maturity_map = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
 
-for i, (m_key, m_label) in enumerate(maturity_options.items()):
+for i, (m_key, m_label) in enumerate(maturity_map.items()):
     with m_cols[i]:
-        # If this button is selected, wrap it in the CSS class
         if st.session_state.get("maturity") == m_key:
             st.markdown('<div class="selected-btn">', unsafe_allow_html=True)
         if st.button(m_label, key=f"mat_{m_key}"):
@@ -74,7 +74,7 @@ for i, (m_key, m_label) in enumerate(maturity_options.items()):
         if st.session_state.get("maturity") == m_key:
             st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. STEP 2: INDUSTRY (5-column layout)
+# 5. STEP 2: INDUSTRY (With Permanent Highlight)
 if "maturity" in st.session_state:
     st.markdown('### Step 2: Select Industry Segment')
     i_cols = st.columns(5)
@@ -92,21 +92,23 @@ if "maturity" in st.session_state:
             if st.session_state.get("ind") == i_label:
                 st.markdown('</div>', unsafe_allow_html=True)
 
-# 6. STEP 3: GENERATE
+# 6. STEP 3: GENERATE (FORCED V1 STABLE ENDPOINT)
 if "ind" in st.session_state:
     st.markdown(f"**Strategy Path:** `{st.session_state.ind}` | `{st.session_state.maturity}`")
     frictions = st.text_area("Define top friction points:", placeholder="e.g. Manual data silos...")
     
     if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
         try:
-            # FIX: Configure API without the v1beta prefix
-            genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+            # FIX: Explicitly set api_version to 'v1' to avoid the v1beta 404
+            client = genai.Client(
+                api_key=st.secrets["GEMINI_API_KEY"],
+                http_options=types.HttpOptions(api_version='v1')
+            )
             
-            # Use the stable production model name
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            
-            response = model.generate_content(
-                f"IQ Strategist Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: 12-week GESHIDO roadmap."
+            # Use stable model ID
+            response = client.models.generate_content(
+                model="gemini-1.5-flash",
+                contents=f"Context: {load_knowledge()}\n\nIndustry: {st.session_state.ind}, Maturity: {st.session_state.maturity}. Friction: {frictions}. Create a roadmap."
             )
             st.markdown("---")
             st.markdown(response.text)
