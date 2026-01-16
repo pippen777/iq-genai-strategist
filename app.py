@@ -11,7 +11,7 @@ def apply_iq_branding():
     .stApp { background: radial-gradient(circle at top right, #1a1b3a, #0b101b) !important; color: white !important; }
     .title-text { background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 3.5rem !important; font-weight: 800 !important; font-family: 'Arial Black', sans-serif !important; }
     
-    /* BASE BUTTON STYLE */
+    /* UNIVERSAL BUTTON STYLE */
     div.stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -23,26 +23,13 @@ def apply_iq_branding():
         font-weight: 600 !important;
     }
 
-    /* HOVER GLOW */
-    div.stButton > button:hover {
+    /* HOVER & PERSISTENT GLOW */
+    div.stButton > button:hover, .selected-glow div.stButton > button {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         border: none !important;
-        box-shadow: 0 15px 30px rgba(142, 45, 226, 0.5) !important;
-    }
-
-    /* SELECTED PULSE STATE */
-    .locked-selection div.stButton > button {
-        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
-        border: none !important;
-        box-shadow: 0 0 20px rgba(0, 173, 239, 0.8) !important;
-        transform: scale(1.05) !important;
-        animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-        0% { box-shadow: 0 0 10px rgba(0, 173, 239, 0.4); }
-        50% { box-shadow: 0 0 25px rgba(240, 47, 194, 0.7); }
-        100% { box-shadow: 0 0 10px rgba(0, 173, 239, 0.4); }
+        box-shadow: 0 10px 25px rgba(142, 45, 226, 0.7) !important;
+        transform: translateY(-3px) !important;
+        color: white !important;
     }
 
     .stTextArea textarea { background-color: rgba(255, 255, 255, 0.05) !important; color: white !important; border-radius: 12px !important; }
@@ -51,7 +38,7 @@ def apply_iq_branding():
 
 apply_iq_branding()
 
-# 2. PASSWORD GATE
+# 2. PASSWORD GATE & WAKE LOGIC
 if "password_correct" not in st.session_state:
     st.markdown('<h1 class="title-text">Strategy Vault</h1>', unsafe_allow_html=True)
     pwd = st.text_input("Access Code", type="password")
@@ -61,59 +48,54 @@ if "password_correct" not in st.session_state:
             st.rerun()
     st.stop()
 
-# 3. KNOWLEDGE LOADER
-def load_knowledge():
-    try:
-        with open("knowledge/iq_frameworks.txt", "r") as f: return f.read()
-    except: return "IQ GESHIDO: Value Weekly, Foundations Monthly."
-
+# 3. ORCHESTRATOR HEADER
 st.markdown('<p class="title-text">Orchestrator</p>', unsafe_allow_html=True)
 
 # 4. STEP 1: MATURITY
 st.markdown('### Step 1: Diagnose Maturity')
 m_cols = st.columns(3)
-maturity_map = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
+opts = {"Explorer": "🔭 EXPLORER", "Scaler": "🚀 SCALER", "Innovator": "🤖 INNOVATOR"}
 
-for i, (m_key, m_label) in enumerate(maturity_map.items()):
+for i, (k, v) in enumerate(opts.items()):
     with m_cols[i]:
-        if st.session_state.get("maturity") == m_key:
-            st.markdown('<div class="locked-selection">', unsafe_allow_html=True)
-        if st.button(m_label, key=f"mat_{m_key}"):
-            st.session_state.maturity = m_key
+        if st.session_state.get("maturity") == k:
+            st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
+        if st.button(v, key=f"m_{k}"):
+            st.session_state.maturity = k
             st.rerun()
-        if st.session_state.get("maturity") == m_key:
+        if st.session_state.get("maturity") == k:
             st.markdown('</div>', unsafe_allow_html=True)
 
-# 5. STEP 2: INDUSTRY
+# 5. STEP 2: INDUSTRY SECTORS
 if "maturity" in st.session_state:
     st.markdown('### Step 2: Select Industry Segment')
     i_cols = st.columns(5)
-    ind_map = {"Fin": "🏦 Financial", "Ret": "🛒 Retail", "Tel": "📡 Telecoms", "Pub": "🏛️ Public", "Min": "⛏️ Mining"}
-    for i, (i_key, i_label) in enumerate(ind_map.items()):
+    inds = {"Fin": "🏦 Financial", "Ret": "🛒 Retail", "Tel": "📡 Telecoms", "Pub": "🏛️ Public", "Min": "⛏️ Mining"}
+    for i, (k, v) in enumerate(inds.items()):
         with i_cols[i]:
-            if st.session_state.get("ind") == i_label:
-                st.markdown('<div class="locked-selection">', unsafe_allow_html=True)
-            if st.button(i_label, key=f"ind_{i_key}"):
-                st.session_state.ind = i_label
+            if st.session_state.get("ind") == v:
+                st.markdown('<div class="selected-glow">', unsafe_allow_html=True)
+            if st.button(v, key=f"i_{k}"):
+                st.session_state.ind = v
                 st.rerun()
-            if st.session_state.get("ind") == i_label:
+            if st.session_state.get("ind") == v:
                 st.markdown('</div>', unsafe_allow_html=True)
 
-# 6. STEP 3: GENERATE (FORCED STABLE VERSION)
+# 6. STEP 3: GENERATE (STABLE PRODUCTION PATH)
 if "ind" in st.session_state:
     st.markdown(f"**Path Locked:** `{st.session_state.ind}` | `{st.session_state.maturity}`")
-    frictions = st.text_area("Friction Points:", placeholder="e.g. Inefficient loan processing...")
+    frictions = st.text_area("Friction Points:", placeholder="e.g. slow marketing...")
     
     if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
         try:
-            # FORCE STABLE CONFIGURATION
+            # Configure API using the stable legacy method
             genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
             
-            # Use the exact stable name without the 'models/' prefix for this SDK
+            # Use specific production string
             model = genai.GenerativeModel('gemini-1.5-flash')
             
             response = model.generate_content(
-                f"IQ Strategist Context: {load_knowledge()}\n\nClient: {st.session_state.ind} ({st.session_state.maturity})\nFrictions: {frictions}\n\nTask: 12-week GESHIDO roadmap."
+                f"IQ Strategist: Industry {st.session_state.ind}, Maturity {st.session_state.maturity}. Friction: {frictions}. Create a 12-week GESHIDO roadmap."
             )
             st.markdown("---")
             st.markdown(response.text)
