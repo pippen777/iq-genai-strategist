@@ -28,7 +28,7 @@ def apply_iq_styles():
         margin: 25px 0 10px 0;
     }
 
-    /* THE MASSIVE 'AHA' HERO BOX */
+    /* THE 'AHA' MOMENT BOX */
     .aha-box {
         padding: 40px;
         background: rgba(0, 173, 239, 0.08);
@@ -43,11 +43,26 @@ def apply_iq_styles():
         font-weight: 800 !important;
         line-height: 1.2 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
 
-    /* KINETIC BUTTONS */
+    /* THE EXECUTIVE PHASE CARDS */
+    .phase-card {
+        background: rgba(255, 255, 255, 0.05) !important;
+        padding: 25px !important;
+        border-radius: 15px !important;
+        border-top: 4px solid #F02FC2 !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    }
+
+    .phase-card h3 {
+        color: #F02FC2 !important;
+        margin-top: 0 !important;
+        font-size: 1.4rem !important;
+    }
+
+    /* BUTTONS & SELECTION */
     .stButton > button {
         background: rgba(255, 255, 255, 0.05) !important;
         color: white !important;
@@ -61,11 +76,9 @@ def apply_iq_styles():
     .stButton > button:hover {
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
         transform: scale(1.03) translateY(-3px) !important;
-        box-shadow: 0 10px 25px rgba(0, 173, 239, 0.3) !important;
         border: none !important;
     }
 
-    /* SELECTED STATE LOCK */
     .stButton button:has(p:contains("✓")) {
         background-color: #00ADEF !important;
         color: #05101b !important;
@@ -74,20 +87,17 @@ def apply_iq_styles():
         font-weight: 800 !important;
     }
 
-    /* TARGET ROI GLOW */
     .target-state {
         color: #00ADEF !important;
         font-weight: 800 !important;
         text-shadow: 0 0 10px rgba(0, 173, 239, 0.5);
     }
 
-    /* THE ROADMAP TRIGGER */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         height: 65px !important;
         border-radius: 32px !important;
         font-weight: 800 !important;
-        border: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
