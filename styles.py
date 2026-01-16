@@ -17,6 +17,7 @@ def apply_iq_styles():
         background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2);
         -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         font-size: 3.5rem !important; font-weight: 800 !important;
+        margin-bottom: 0px;
     }
 
     .step-header {
@@ -24,62 +25,69 @@ def apply_iq_styles():
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 0.8rem;
-        margin: 25px 0 15px 0;
+        margin: 25px 0 10px 0;
     }
 
-    /* KINETIC HOVER BUTTONS */
-    .stButton > button {
-        background: rgba(255, 255, 255, 0.05) !important;
-        color: white !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        border-radius: 12px !important;
-        height: 65px !important;
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    }
-
-    .stButton > button:hover {
-        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
-        transform: scale(1.05) translateY(-5px) !important;
-        box-shadow: 0 15px 35px rgba(0, 173, 239, 0.4) !important;
-        border: none !important;
-    }
-
-    /* THE SOLID BLUE SELECTION LOCK */
-    .stButton button:has(p:contains("✓")) {
-        background-color: #00ADEF !important;
-        color: #05101b !important;
-        border: none !important;
-        box-shadow: 0 0 25px rgba(0, 173, 239, 0.6) !important;
-        font-weight: 800 !important;
-    }
-
-    /* THE MASSIVE 'AHA' HERO */
+    /* THE MASSIVE 'AHA' HERO BOX */
     .aha-box {
-        padding: 45px;
+        padding: 40px;
         background: rgba(0, 173, 239, 0.08);
         border-left: 8px solid #00ADEF;
         border-radius: 20px;
-        margin: 40px 0;
+        margin: 30px 0;
+        box-shadow: 0 0 50px rgba(0, 173, 239, 0.1);
     }
 
     .aha-text {
-        font-size: 2.4rem !important;
+        font-size: 2.2rem !important;
         font-weight: 800 !important;
+        line-height: 1.2 !important;
         background: linear-gradient(90deg, #00ADEF, #FFFFFF);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
+    /* KINETIC BUTTONS */
+    .stButton > button {
+        background: rgba(255, 255, 255, 0.05) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 12px !important;
+        height: 60px !important;
+        width: 100% !important;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    .stButton > button:hover {
+        background: linear-gradient(to right, #00ADEF, #8E2DE2, #F02FC2) !important;
+        transform: scale(1.03) translateY(-3px) !important;
+        box-shadow: 0 10px 25px rgba(0, 173, 239, 0.3) !important;
+        border: none !important;
+    }
+
+    /* SELECTED STATE LOCK */
+    .stButton button:has(p:contains("✓")) {
+        background-color: #00ADEF !important;
+        color: #05101b !important;
+        border: none !important;
+        box-shadow: 0 0 25px rgba(0, 173, 239, 0.5) !important;
+        font-weight: 800 !important;
+    }
+
+    /* TARGET ROI GLOW */
     .target-state {
         color: #00ADEF !important;
-        font-weight: 900 !important;
-        text-shadow: 0 0 15px rgba(0, 173, 239, 0.8);
+        font-weight: 800 !important;
+        text-shadow: 0 0 10px rgba(0, 173, 239, 0.5);
     }
-    
+
+    /* THE ROADMAP TRIGGER */
     div.stButton > button[kind="primary"] {
         background: linear-gradient(45deg, #00ADEF, #F02FC2) !important;
         height: 65px !important;
         border-radius: 32px !important;
+        font-weight: 800 !important;
+        border: none !important;
     }
     </style>
     """, unsafe_allow_html=True)
