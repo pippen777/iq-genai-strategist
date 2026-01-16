@@ -41,20 +41,16 @@ if "ind" not in st.session_state:
 st.markdown('<p class="step-header">03 / DEFINE STRATEGIC FRICTION</p>', unsafe_allow_html=True)
 frictions = st.text_area("Identify strategic friction points:", height=150, placeholder="Define the business blocker...")
 
+# Replace your button logic in app.py with this:
 if st.button("⚡ ORCHESTRATE ROADMAP", type="primary"):
     if not frictions:
-        st.warning("Please provide context to ground the strategy.")
+        st.warning("Provide context for the GESHIDO® engine.")
     else:
-        progress_bar = st.progress(0)
-        status = st.empty()
-        status.markdown('<p style="color:#00ADEF;">Synthesizing IQ Strategy...</p>', unsafe_allow_html=True)
-        
-        res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
-        
-        progress_bar.progress(100)
-        status.empty()
-        progress_bar.empty()
+        # PULSE LOADING
+        with st.spinner("Synthesizing Value Streams & Mining GESHIDO® Insights..."):
+            res = run_orchestrator(st.session_state.ind, st.session_state.maturity, frictions)
         
         st.markdown("---")
         st.markdown(res, unsafe_allow_html=True)
-        st.caption("© 2026 iqbusiness | GenAI Keys to Winning Operating System™")
+        # Add the closing workshop CTA we built
+        st.markdown("<div class='aha-box'><p style='font-size:1.2rem;'>Ready to recapture this value?</p></div>", unsafe_allow_html=True)
